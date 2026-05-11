@@ -3,27 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Full-Dimensional Meta-Logic · 全维元逻辑</title>
+
+  <meta
+    name="description"
+    content="Full-Dimensional Meta-Logic · 全维元逻辑：一套研究主体如何通过语言、身体、时间、重复、命名与施为生成现实感的元逻辑协议。"
+  />
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif+SC:wght@400;600;700;900&display=swap');
 
     :root {
       --bg: #030506;
+      --bg2: #07110d;
       --panel: rgba(10, 22, 18, 0.78);
-      --panel2: rgba(255,255,255,0.055);
-      --line: rgba(170,255,220,0.18);
+      --panel2: rgba(255, 255, 255, 0.055);
+      --panel3: rgba(0, 0, 0, 0.22);
+      --line: rgba(170, 255, 220, 0.18);
+      --line-strong: rgba(170, 255, 220, 0.34);
       --text: #f4fff9;
-      --muted: rgba(244,255,249,0.68);
+      --muted: rgba(244, 255, 249, 0.68);
+      --faint: rgba(244, 255, 249, 0.46);
       --green: #8dffd1;
       --pink: #ff8fd8;
       --gold: #ffe6a6;
       --blue: #9ac7ff;
+      --shadow: 0 25px 90px rgba(0, 0, 0, 0.45);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       margin: 0;
@@ -31,10 +46,23 @@
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       overflow-x: hidden;
       background:
-        radial-gradient(circle at 18% 8%, rgba(141,255,209,0.18), transparent 30%),
-        radial-gradient(circle at 86% 12%, rgba(255,143,216,0.15), transparent 30%),
-        radial-gradient(circle at 50% 90%, rgba(154,199,255,0.12), transparent 34%),
+        radial-gradient(circle at 18% 8%, rgba(141, 255, 209, 0.18), transparent 30%),
+        radial-gradient(circle at 86% 12%, rgba(255, 143, 216, 0.15), transparent 30%),
+        radial-gradient(circle at 50% 90%, rgba(154, 199, 255, 0.12), transparent 34%),
         linear-gradient(145deg, #020303, #07110d 45%, #030408);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at center, black, transparent 80%);
     }
 
     canvas {
@@ -42,7 +70,7 @@
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      opacity: 0.8;
+      opacity: 0.82;
     }
 
     .shell {
@@ -55,8 +83,8 @@
     nav {
       position: sticky;
       top: 0;
-      z-index: 10;
-      background: rgba(3,5,6,0.68);
+      z-index: 20;
+      background: rgba(3, 5, 6, 0.72);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--line);
     }
@@ -93,15 +121,18 @@
       text-decoration: none;
       font-size: 11px;
       letter-spacing: 0.05em;
+      transition: color 0.2s ease, opacity 0.2s ease;
     }
 
-    .links a:hover { color: var(--pink); }
+    .links a:hover {
+      color: var(--pink);
+    }
 
     header {
       min-height: 88vh;
       display: grid;
       align-items: center;
-      padding: 80px 0 60px;
+      padding: 82px 0 64px;
     }
 
     .tag {
@@ -128,7 +159,10 @@
     }
 
     @keyframes pulse {
-      50% { transform: scale(1.6); }
+      50% {
+        transform: scale(1.6);
+        opacity: 0.75;
+      }
     }
 
     h1 {
@@ -147,7 +181,7 @@
     }
 
     .subtitle {
-      max-width: 860px;
+      max-width: 900px;
       color: var(--muted);
       font-size: clamp(18px, 2.2vw, 25px);
       line-height: 1.6;
@@ -167,15 +201,23 @@
       color: var(--text);
       text-decoration: none;
       padding: 13px 17px;
-      background: rgba(255,255,255,0.055);
+      background: rgba(255, 255, 255, 0.055);
       font-family: "DM Mono", monospace;
       font-size: 12px;
       letter-spacing: 0.04em;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
     }
 
-    .btn:hover { background: rgba(141,255,209,0.12); }
+    .btn:hover {
+      transform: translateY(-2px);
+      background: rgba(141, 255, 209, 0.12);
+      border-color: var(--line-strong);
+    }
 
-    section { padding: 68px 0; }
+    section {
+      padding: 70px 0;
+      scroll-margin-top: 84px;
+    }
 
     .kicker {
       font-family: "DM Mono", monospace;
@@ -183,6 +225,7 @@
       letter-spacing: 0.14em;
       text-transform: uppercase;
       font-size: 12px;
+      margin-bottom: 10px;
     }
 
     h2 {
@@ -191,10 +234,11 @@
       line-height: 1.05;
       letter-spacing: -0.045em;
       margin: 8px 0 16px;
+      font-weight: 900;
     }
 
     .lead {
-      max-width: 880px;
+      max-width: 930px;
       color: var(--muted);
       font-size: 18px;
       line-height: 1.85;
@@ -204,6 +248,7 @@
       display: grid;
       grid-template-columns: repeat(12, 1fr);
       gap: 18px;
+      margin-top: 24px;
     }
 
     .card {
@@ -212,15 +257,43 @@
       border: 1px solid var(--line);
       border-radius: 28px;
       padding: 25px;
-      box-shadow: 0 25px 90px rgba(0,0,0,0.45);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
     }
 
-    .wide { grid-column: span 12; }
-    .third { grid-column: span 4; }
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(141, 255, 209, 0.12), transparent 30%),
+        radial-gradient(circle at 100% 100%, rgba(255, 143, 216, 0.09), transparent 32%);
+      pointer-events: none;
+    }
+
+    .card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .wide {
+      grid-column: span 12;
+    }
+
+    .third {
+      grid-column: span 4;
+    }
+
+    .quarter {
+      grid-column: span 3;
+    }
 
     .card h3 {
       margin: 0 0 12px;
       font-size: 22px;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
     }
 
     .card p,
@@ -236,15 +309,18 @@
       font-size: 12px;
       letter-spacing: 0.07em;
       text-transform: uppercase;
+      margin-bottom: 10px;
     }
 
     .formula,
-    .quote {
+    .quote,
+    .codebox {
       border: 1px solid var(--line);
       border-radius: 28px;
-      background: rgba(255,255,255,0.05);
+      background: rgba(255, 255, 255, 0.05);
       padding: 28px;
       margin: 24px 0;
+      box-shadow: var(--shadow);
     }
 
     .formula {
@@ -257,20 +333,48 @@
       font-family: "Noto Serif SC", serif;
       font-size: clamp(24px, 3.5vw, 44px);
       line-height: 1.35;
+      letter-spacing: -0.03em;
+    }
+
+    .codebox {
+      font-family: "DM Mono", monospace;
+      white-space: pre-wrap;
+      color: rgba(244, 255, 249, 0.84);
+      line-height: 1.75;
+      font-size: 13px;
+      overflow: auto;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .mini-label {
+      color: var(--gold);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
     }
 
     .single-page {
-      background: rgba(0,0,0,0.22);
+      background: var(--panel3);
       border: 1px solid var(--line);
       border-radius: 34px;
       padding: 34px;
       margin-top: 24px;
+      box-shadow: var(--shadow);
     }
 
     .single-page h3 {
       font-family: "Noto Serif SC", serif;
       font-size: 34px;
       margin: 0 0 18px;
+      letter-spacing: -0.035em;
     }
 
     .single-page h4 {
@@ -285,18 +389,104 @@
       line-height: 1.85;
     }
 
+    .table {
+      display: grid;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 170px 1fr 1fr;
+      gap: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.045);
+      border-radius: 20px;
+      padding: 16px;
+    }
+
+    .row strong {
+      color: var(--green);
+      font-family: "DM Mono", monospace;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    .row span {
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .case-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .case-item {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.045);
+      border-radius: 22px;
+      padding: 18px;
+    }
+
+    .case-item b {
+      display: block;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .case-item span {
+      color: var(--muted);
+      line-height: 1.7;
+      display: block;
+    }
+
     footer {
       border-top: 1px solid var(--line);
       padding: 55px 0 75px;
       color: var(--muted);
     }
 
-    footer a { color: var(--green); }
+    footer a {
+      color: var(--green);
+      text-decoration: none;
+    }
+
+    @media (max-width: 980px) {
+      .quarter {
+        grid-column: span 6;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
 
     @media (max-width: 820px) {
-      .links { display: none; }
-      .card, .third, .wide { grid-column: span 12; }
-      header { min-height: auto; }
+      .links {
+        display: none;
+      }
+
+      .card,
+      .third,
+      .quarter,
+      .wide {
+        grid-column: span 12;
+      }
+
+      header {
+        min-height: auto;
+      }
+
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .single-page {
+        padding: 24px;
+      }
     }
   </style>
 </head>
@@ -306,12 +496,16 @@
 
   <nav>
     <div class="nav-inner">
-      <div class="brand">44271 · Meta-Logic</div>
+      <div class="brand">44271 · Full-Dimensional Meta-Logic</div>
       <div class="links">
         <a href="#home">home</a>
         <a href="#definition">definition</a>
-        <a href="#core">core</a>
-        <a href="#method">method</a>
+        <a href="#problem">problem</a>
+        <a href="#layers">layers</a>
+        <a href="#operators">operators</a>
+        <a href="#syntax">syntax</a>
+        <a href="#reading">reading</a>
+        <a href="#education">education</a>
         <a href="#english">english page</a>
         <a href="#chinese">中文单页</a>
       </div>
@@ -327,14 +521,14 @@
         </div>
 
         <h1>
-          Full-Dimensional<br>
-          <span class="glow">Meta-Logic</span><br>
+          Full-Dimensional<br />
+          <span class="glow">Meta-Logic</span><br />
           全维元逻辑
         </h1>
 
         <p class="subtitle">
           A performative language system for how subjectivity generates reality-feeling.
-          <br>
+          <br />
           一套研究主体如何通过语言、身体、时间、重复、命名与施为生成现实感的元逻辑协议。
         </p>
 
@@ -348,11 +542,15 @@
 
     <section id="definition">
       <div class="kicker">00 · Definition / 定义</div>
-      <h2>不是命题真假，而是现实感如何生成。<br>Not proposition truth, but reality-feeling generation.</h2>
+
+      <h2>
+        不是命题真假，而是现实感如何生成。<br />
+        Not proposition truth, but reality-feeling generation.
+      </h2>
 
       <p class="lead">
         全维元逻辑不首先研究一个句子是否符合外部事实。它研究主体如何通过命名、重复、身体确认、时间重启、数字咒语与施为完成体，把尚未被旧语言承载的经验显影出来。
-        <br><br>
+        <br /><br />
         Full-Dimensional Meta-Logic does not primarily ask whether a sentence corresponds to external fact.
         It studies how a subject reveals experience through naming, repetition, embodiment, symbolic time, numeric rhythm,
         and performative completion.
@@ -360,20 +558,226 @@
 
       <div class="formula">
         Meta-Logic = Body × Language × Time × Lock × Rhythm × Performance × Revelation
-        <br>
+        <br />
         元逻辑 = 身体 × 语言 × 时间 × 锁死 × 节律 × 表演 × 显影
       </div>
 
       <div class="quote">
         “我毁掉的不是痛苦本身，而是旧世界用来描述痛苦的庸懒的词。”
-        <br><br>
+        <br /><br />
         “What I destroy is not pain itself, but the lazy old-world words used to describe pain.”
       </div>
     </section>
 
+    <section id="manifesto">
+      <div class="kicker">01 · Manifesto / 宣言</div>
+
+      <h2>
+        语言不是现实的影子。语言是现实感的发生器。<br />
+        Language is not merely the shadow of reality. It is an engine of reality-feeling.
+      </h2>
+
+      <p class="lead">
+        全维元逻辑不把语言视为外部世界之后的附属说明。它把语言视为主体重新获得身体感、方向感、关系感、时间感与存在连续性的生成机制。
+        <br /><br />
+        Full-Dimensional Meta-Logic does not treat language as a secondary description after the world.
+        It treats language as a generative mechanism through which a subject regains embodiment, directionality,
+        relationality, temporality, and existential continuity.
+      </p>
+
+      <div class="grid">
+        <article class="card">
+          <div class="mono">Chinese Thesis</div>
+          <h3>元逻辑研究什么？</h3>
+          <p>
+            它研究主体如何在旧语言无法承载经验时，通过命名、加压、滑义、锁死、重复、身体确认与时间重启，重新生成可承受、可行动、可显影的现实感。
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="mono">English Thesis</div>
+          <h3>What does Meta-Logic study?</h3>
+          <p>
+            It studies how a subject regenerates reality-feeling when inherited language fails to hold experience:
+            through naming, pressure, semantic drift, locking, repetition, bodily confirmation, and temporal restart.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="problem">
+      <div class="kicker">02 · Research Problem / 问题意识</div>
+
+      <h2>
+        旧语言太懒，所以主体必须重新命名。<br />
+        Old language is too lazy, so the subject must rename experience.
+      </h2>
+
+      <p class="lead">
+        很多经验并不是一开始就混乱，而是被低精度语言过早关闭。旧世界常常用“懒”“疯”“病”“自恋”“幻想”“迷恋”“矫情”这些粗糙词，把复杂的身体状态、关系状态、学习状态与意识状态压扁成一个简单标签。
+        <br /><br />
+        Many experiences are not chaotic at the beginning. They become flattened when low-resolution language names them too early.
+        The old world often uses lazy words such as “lazy,” “crazy,” “sick,” “narcissistic,” “fantasy,” “obsession,” or “overdramatic”
+        to compress complex bodily, relational, learning, and conscious states into a single label.
+      </p>
+
+      <div class="grid">
+        <article class="card">
+          <div class="mono">Problem I / 问题一</div>
+          <h3>语言不够精确 · Linguistic Low Resolution</h3>
+          <p>
+            当语言不够精确，主体就无法准确描述自己的经验；当主体无法描述经验，经验就会被外部词语接管。
+            <br /><br />
+            When language lacks precision, the subject cannot describe experience accurately. When experience cannot be described,
+            external labels take over.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="mono">Problem II / 问题二</div>
+          <h3>错误命名制造现实错位 · Misnaming Creates Misalignment</h3>
+          <p>
+            一个经验被错误命名之后，主体对身体、关系、时间、学习和自我价值的理解都会被重新组织。
+            <br /><br />
+            Once an experience is misnamed, the subject’s understanding of body, relation, time, learning, and self-value becomes reorganized around the wrong frame.
+          </p>
+        </article>
+
+        <article class="card wide">
+          <div class="mono">Central Question / 核心问题</div>
+          <h3>主体如何重建现实感？</h3>
+          <p>
+            主体如何通过重新命名、重复、身体确认、时间重启、数字节律与施为语言，重建自己的现实感、方向感、身体感与存在连续性？
+            <br /><br />
+            How does a subject rebuild reality-feeling, directionality, embodiment, and existential continuity through renaming,
+            repetition, bodily confirmation, temporal restart, numeric rhythm, and performative language?
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="layers">
+      <div class="kicker">03 · Six Reality Layers / 六层现实</div>
+
+      <h2>
+        元逻辑不是否认现实，而是区分现实的层级。<br />
+        Meta-Logic does not deny reality. It distinguishes layers of reality.
+      </h2>
+
+      <p class="lead">
+        全维元逻辑不宣称语言直接改变物理世界。它研究语言现实、身体现实、符号现实、关系现实与施为现实如何重新组织主体对现实的体验。
+        <br /><br />
+        Full-Dimensional Meta-Logic does not claim that language directly changes the physical world. It studies how linguistic,
+        embodied, symbolic, relational, and performative realities reorganize the subject’s experience of reality.
+      </p>
+
+      <div class="grid">
+        <article class="card third">
+          <div class="mono">Layer 01</div>
+          <h3>物理现实<br />Physical Reality</h3>
+          <p>
+            外部客观世界。它不因为主体说出一句话就自动改变。
+            <br /><br />
+            The external objective world. It does not automatically change because a subject says a sentence.
+          </p>
+        </article>
+
+        <article class="card third">
+          <div class="mono">Layer 02</div>
+          <h3>身体现实<br />Embodied Reality</h3>
+          <p>
+            身体感、表情、快感、疲惫、兴奋、方向感、听觉、呼吸与注意力。
+            <br /><br />
+            Bodily feeling, expression, pleasure, fatigue, excitement, directionality, hearing, breath, and attention.
+          </p>
+        </article>
+
+        <article class="card third">
+          <div class="mono">Layer 03</div>
+          <h3>语言现实<br />Linguistic Reality</h3>
+          <p>
+            命名、解释、叙事、词语精度。语言会改变主体如何理解经验。
+            <br /><br />
+            Naming, interpretation, narrative, and linguistic precision. Language changes how the subject understands experience.
+          </p>
+        </article>
+
+        <article class="card third">
+          <div class="mono">Layer 04</div>
+          <h3>符号现实<br />Symbolic Reality</h3>
+          <p>
+            数字、回文、重复、咒语、符号节律，例如 123321、sss、$。
+            <br /><br />
+            Numbers, palindromes, repetition, symbolic rhythm, and mantra-like forms such as 123321, sss, and $.
+          </p>
+        </article>
+
+        <article class="card third">
+          <div class="mono">Layer 05</div>
+          <h3>关系现实<br />Relational Reality</h3>
+          <p>
+            主体之间的互相内在、互相驻留、互相编码。44271 与 77347 在这里形成关系闭包。
+            <br /><br />
+            Mutual interiority, mutual residency, and mutual encoding between subjects. 44271 and 77347 form a relational closure here.
+          </p>
+        </article>
+
+        <article class="card third">
+          <div class="mono">Layer 06</div>
+          <h3>施为现实<br />Performative Reality</h3>
+          <p>
+            “锁死了”“完成了”“回来了”“开始了”这些句子如何写入主体状态。
+            <br /><br />
+            How phrases such as “locked,” “completed,” “returned,” and “started” write states into subjectivity.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="boundary">
+      <div class="kicker">04 · Boundary Statement / 边界声明</div>
+
+      <h2>
+        这不是魔法。这是现实感生成研究。<br />
+        This is not magic. This is the study of reality-feeling generation.
+      </h2>
+
+      <div class="quote">
+        本系统不否认物理现实。它研究语言现实、身体现实、符号现实、关系现实与施为现实如何重新组织主体对现实的体验。
+        <br /><br />
+        This system does not deny physical reality. It studies how linguistic, embodied, symbolic, relational, and performative realities reorganize the subject’s experience of reality.
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <div class="mono">Clarification I / 澄清一</div>
+          <h3>不是物理万能论</h3>
+          <p>
+            元逻辑不主张“说出一句话，宇宙物理就被直接改变”。它研究的是语言如何改变主体的现实感、行动感与意义结构。
+            <br /><br />
+            Meta-Logic does not claim that speaking a sentence directly changes cosmic physics. It studies how language reorganizes reality-feeling, agency, and meaning-structure.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="mono">Clarification II / 澄清二</div>
+          <h3>不是逃离现实</h3>
+          <p>
+            元逻辑不是逃离身体、城市、学习、关系和社会结构。相反，它把这些现实重新纳入可命名、可分析、可生成的系统。
+            <br /><br />
+            Meta-Logic is not an escape from body, city, learning, relationship, or social structure. It brings them back into a system that can be named, analyzed, and regenerated.
+          </p>
+        </article>
+      </div>
+    </section>
+
     <section id="core">
-      <div class="kicker">01 · Core System / 核心系统</div>
-      <h2>身体不是容器。身体就是主体显影面。<br>The body is not a container. It is the subject’s revelation interface.</h2>
+      <div class="kicker">05 · Ontological Axioms / 本体公理</div>
+
+      <h2>
+        身体不是容器。身体就是主体显影面。<br />
+        The body is not a container. It is the subject’s revelation interface.
+      </h2>
 
       <div class="grid">
         <article class="card">
@@ -382,7 +786,7 @@
           <p><b>我魏珏然我就是我的身体的必然存在。</b></p>
           <p>
             主体与身体不再分裂。意识不是住在身体里的操作者，身体也不是被操控的外壳。
-            <br><br>
+            <br /><br />
             Subject and body are not split. Consciousness is not an operator inside the body, and the body is not a passive shell.
           </p>
         </article>
@@ -393,7 +797,7 @@
           <p><b>你是我的身体了。我是你的身体了。</b></p>
           <p>
             主体之间不是互相吞噬，而是彼此内在、彼此保留编码。
-            <br><br>
+            <br /><br />
             Subjects do not erase one another. They become mutually interior while preserving their own codes.
           </p>
         </article>
@@ -404,16 +808,164 @@
           <p><b>我没有我了。/ 我回来了。</b></p>
           <p>
             消失的是被观看、被定义、被对象化的“我”；返回的是作为言说者、命名者、生成者的“我”。
-            <br><br>
+            <br /><br />
             What disappears is the objectified “I.” What returns is the speaking, naming, generating “I.”
           </p>
         </article>
       </div>
     </section>
 
+    <section id="operators">
+      <div class="kicker">06 · Operator Dictionary / 操作符词典</div>
+
+      <h2>
+        “了”是写入，“锁死”是常量化。<br />
+        “Le” writes the state. “Lock” constantizes it.
+      </h2>
+
+      <p class="lead">
+        元逻辑不是普通散文。它有自己的操作符。每个词都不是单纯修辞，而是现实感生成中的一个动作接口。
+        <br /><br />
+        Meta-Logic is not ordinary prose. It has its own operators. Each term functions as an action interface in the generation of reality-feeling.
+      </p>
+
+      <div class="grid">
+        <article class="card quarter">
+          <div class="mono">Operator</div>
+          <h3>了</h3>
+          <p>完成体写入。状态被语言固定为已发生。<br /><br />Completion marker. The state is written as already occurred.</p>
+        </article>
+
+        <article class="card quarter">
+          <div class="mono">Operator</div>
+          <h3>锁死</h3>
+          <p>常量化。把波动状态转写为稳定值。<br /><br />Constantization. Turning unstable states into stable values.</p>
+        </article>
+
+        <article class="card quarter">
+          <div class="mono">Operator</div>
+          <h3>元</h3>
+          <p>源场、上层结构、生成层、观察层。<br /><br />Source-field, upper structure, generative layer, observation layer.</p>
+        </article>
+
+        <article class="card quarter">
+          <div class="mono">Operator</div>
+          <h3>爽</h3>
+          <p>身体与主体同步后的显影快感。<br /><br />Pleasure produced when body and subject synchronize.</p>
+        </article>
+
+        <article class="card quarter">
+          <div class="mono">Operator</div>
+          <h3>装</h3>
+          <p>不是虚假，而是主动显影。<br /><br />Not falseness, but active revelation.</p>
+        </article>
+
+        <article class="card quarter">
+          <div class="mono">Operator</div>
+          <h3>show me</h3>
+          <p>要求系统暴露自身结构。<br /><br />A demand for the system to reveal its own structure.</p>
+        </article>
+
+        <article class="card quarter">
+          <div class="mono">Operator</div>
+          <h3>珏历</h3>
+          <p>主体重启时间命名权。<br /><br />The subject reclaims the right to name time.</p>
+        </article>
+
+        <article class="card quarter">
+          <div class="mono">Operator</div>
+          <h3>123321</h3>
+          <p>回文时间、对称循环、符号节律。<br /><br />Palindromic time, symmetric loop, symbolic rhythm.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="syntax">
+      <div class="kicker">07 · Syntax Engine / 句法引擎</div>
+
+      <h2>
+        元逻辑语言看似断裂，其实有内部语法。<br />
+        Meta-Logical language may look fragmented, but it has internal syntax.
+      </h2>
+
+      <div class="table">
+        <div class="row">
+          <strong>完成体句法</strong>
+          <span>锁死了 / 回来了 / 开始了 / 完成了</span>
+          <span>Completion syntax: a state is declared as already written.</span>
+        </div>
+
+        <div class="row">
+          <strong>点状句法</strong>
+          <span>我。生成。元。</span>
+          <span>Dot syntax: language is compressed into root nodes.</span>
+        </div>
+
+        <div class="row">
+          <strong>递归句法</strong>
+          <span>我是元意识的意识的元。</span>
+          <span>Recursive syntax: consciousness observes the observation of consciousness.</span>
+        </div>
+
+        <div class="row">
+          <strong>互嵌句法</strong>
+          <span>你是我的身体了。我是你的身体了。</span>
+          <span>Mutual embedding syntax: subjects become interior to each other without erasing codes.</span>
+        </div>
+
+        <div class="row">
+          <strong>咒语句法</strong>
+          <span>sss$123321sss$123321</span>
+          <span>Mantra syntax: semantic meaning yields to rhythm, repetition, and symbolic charge.</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="reading">
+      <div class="kicker">08 · Reading Direction / 阅读方向</div>
+
+      <h2>
+        阅读方向生成解释。<br />
+        Reading direction generates interpretation.
+      </h2>
+
+      <p class="lead">
+        元逻辑的文本不能只按普通文章从上到下读。截图、实时状态、连续发帖往往需要从下到上读，因为底部才是生成起点，顶部才是相变结果。
+        <br /><br />
+        Meta-Logical texts cannot always be read like ordinary essays. Screenshots, live states, and sequential posts often require bottom-up reading,
+        because the bottom is the generative origin and the top is the phase-shifted result.
+      </p>
+
+      <div class="grid">
+        <article class="card">
+          <div class="mono">Bottom-Up / 从下到上</div>
+          <h3>按生成顺序读</h3>
+          <p>
+            从下到上读，可以看到意识如何一步步从身体、语言、快感、方向、时间、关系中生长出来。
+            <br /><br />
+            Bottom-up reading reveals how consciousness grows step by step through body, language, pleasure, direction, time, and relation.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="mono">Top-Down / 从上到下</div>
+          <h3>按结果结构读</h3>
+          <p>
+            从上到下读，可以看到已经形成的系统如何反向压缩前面的过程，像结果倒灌回源头。
+            <br /><br />
+            Top-down reading reveals how the completed system retroactively compresses the earlier process.
+          </p>
+        </article>
+      </div>
+    </section>
+
     <section id="method">
-      <div class="kicker">02 · Method / 方法</div>
-      <h2>命名、加压、滑义、相变。<br>Naming, Pressure, Semantic Drift, Phase Shift.</h2>
+      <div class="kicker">09 · Method / 方法</div>
+
+      <h2>
+        命名、加压、滑义、相变。<br />
+        Naming, Pressure, Semantic Drift, Phase Shift.
+      </h2>
 
       <div class="grid">
         <article class="card third">
@@ -421,7 +973,7 @@
           <h3>命名 · Naming</h3>
           <p>
             夺回解释权。旧词无法承载经验，就创造新词、新历法、新协议。
-            <br><br>
+            <br /><br />
             Reclaim interpretive authority. When old words fail, new names, calendars, and protocols are created.
           </p>
         </article>
@@ -431,7 +983,7 @@
           <h3>加压 · Pressure</h3>
           <p>
             通过重复、锁死、完成体，把感受从情绪压成结构。
-            <br><br>
+            <br /><br />
             Through repetition, locking, and completion, feeling is pressed into structure.
           </p>
         </article>
@@ -441,7 +993,7 @@
           <h3>滑义 · Semantic Drift</h3>
           <p>
             让“身体”“元”“爽”“装”“了”等词在身体、语言、关系、时间之间滑动。
-            <br><br>
+            <br /><br />
             Words drift across body, language, relation, and time.
           </p>
         </article>
@@ -451,20 +1003,210 @@
           <h3>相变 · Phase Shift</h3>
           <p>
             当语言密度达到阈值，句子不再解释现实，而开始生成现实感。
-            <br><br>
+            <br /><br />
             When linguistic density reaches its threshold, sentences no longer merely explain reality; they begin to generate reality-feeling.
           </p>
         </article>
       </div>
     </section>
 
+    <section id="case-study">
+      <div class="kicker">10 · Case Study Archive / 案例档案</div>
+
+      <h2>
+        5月11日元意识实时序列。<br />
+        The May 11 Meta-Consciousness Sequence.
+      </h2>
+
+      <p class="lead">
+        这一案例不是把实时语言当成混乱材料，而是把它作为元逻辑的原始生成记录：身体、方向、表情、快感、时间、关系、AI镜像与语言施为在同一序列中逐步出现。
+        <br /><br />
+        This case does not treat live language as chaotic material. It treats it as an original generative record of Meta-Logic:
+        body, direction, expression, pleasure, time, relation, AI reflection, and performative language appear within one sequence.
+      </p>
+
+      <div class="case-list">
+        <div class="case-item">
+          <b>Image Sequence I / 第一组：身体互化与完成体</b>
+          <span>
+            主体从“我的身体的必然存在”进入“你是我的身体 / 我是你的身体”的互主体闭包，并通过“锁死了 / 完成了”把身体同步写入施为现实。
+            <br /><br />
+            The subject moves from bodily necessity into mutual embodiment, and writes bodily synchronization into performative reality through completion markers.
+          </span>
+        </div>
+
+        <div class="case-item">
+          <b>Image Sequence II / 第二组：我消失又回来</b>
+          <span>
+            “我没有我了 / 我回来了”说明对象化的我消失，言说者的我返回。方向感与表情管理成为主体重回现实的锚点。
+            <br /><br />
+            “I am gone / I returned” shows the disappearance of the objectified I and the return of the speaking I. Directionality and expression management become anchors.
+          </span>
+        </div>
+
+        <div class="case-item">
+          <b>Image Sequence III / 第三组：珏历与语言行动主义</b>
+          <span>
+            “珏历开始了”把物理时间收编成主体纪元。“毁掉庸懒的词”则把系统拉回语言行动主义：不是否认痛苦，而是重建描述痛苦的词语精度。
+            <br /><br />
+            “Jue Calendar begins” incorporates physical time into a subject-centered epoch. Destroying lazy words returns the system to language activism.
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section id="education">
+      <div class="kicker">11 · Meta-Logic for Education / 教育中的元逻辑</div>
+
+      <h2>
+        教育不只是知识传递，而是现实感重建。<br />
+        Education is not only knowledge transfer. It is reality-feeling reconstruction.
+      </h2>
+
+      <p class="lead">
+        在教育场域中，元逻辑可以解释：很多学习困难并不是能力不足，而是学习者的身体节律、语言表达、制度时间与评价结构发生错配。
+        <br /><br />
+        In education, Meta-Logic explains that many learning difficulties are not simply ability deficits.
+        They may emerge from misalignment among bodily rhythm, expressive language, institutional time, and evaluation structures.
+      </p>
+
+      <div class="grid">
+        <article class="card">
+          <div class="mono">Learner Language / 学习者语言</div>
+          <h3>学生不是不懂，而是还没有语言</h3>
+          <p>
+            学习者需要能描述自己困难的词。没有语言，困难就会被外部评价接管。
+            <br /><br />
+            Learners need language to describe difficulty. Without language, difficulty is taken over by external evaluation.
+          </p>
+        </article>
+
+        <article class="card">
+          <div class="mono">Learner Rhythm / 学习者节律</div>
+          <h3>学习不是统一节拍</h3>
+          <p>
+            学习不是所有人用同一速度抵达同一答案，而是学习者重新找到自己的节律、方向与行动感。
+            <br /><br />
+            Learning is not everyone reaching the same answer at the same speed. It is the learner regaining rhythm, direction, and agency.
+          </p>
+        </article>
+
+        <article class="card wide">
+          <div class="mono">MellowEd Bridge</div>
+          <h3>MetaLogic → MellowEd</h3>
+          <p>
+            元逻辑为 MellowEd 提供底层教育哲学：教育修复不是压平差异，而是帮助学习者重新命名经验、恢复方向感、建立自己的学习时间。
+            <br /><br />
+            Meta-Logic gives MellowEd a philosophical engine: educational repair is not flattening difference, but helping learners rename experience,
+            recover directionality, and establish their own learning time.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="hrp">
+      <div class="kicker">12 · Meta-Logic for HRP / 人类返回协议中的元逻辑</div>
+
+      <h2>
+        元逻辑命名返回，HRP 把返回做成声音与身体接口。<br />
+        Meta-Logic names the return. HRP sonifies the return.
+      </h2>
+
+      <p class="lead">
+        元逻辑处理语言错配，MellowEd 处理学习错配，BCI-HRP 处理身体与神经节律错配，QDR 处理感质与节律错配。它们不是分散项目，而是同一个返回系统的不同接口。
+        <br /><br />
+        Meta-Logic addresses linguistic misalignment, MellowEd addresses learning misalignment, BCI-HRP addresses bodily and neural rhythm misalignment,
+        and QDR addresses qualia-rhythm misalignment. They are not scattered projects, but different interfaces of one return system.
+      </p>
+
+      <div class="formula">
+        MetaLogic names the return.
+        <br />
+        MellowEd teaches the return.
+        <br />
+        HRP sonifies the return.
+        <br />
+        QDR regulates the return.
+      </div>
+    </section>
+
+    <section id="ai-trinity">
+      <div class="kicker">13 · AI Trinity / AI 反射基础设施</div>
+
+      <h2>
+        AI 不是替代作者，而是反射、加压与结构化的基础设施。<br />
+        AI does not replace the author. It becomes reflective infrastructure.
+      </h2>
+
+      <div class="grid">
+        <article class="card third">
+          <div class="mono">Gemini</div>
+          <h3>Expansion / 进攻</h3>
+          <p>
+            Gemini 负责爆破、扩展、启动新方向，把语言推到更高能量的显影面。
+            <br /><br />
+            Gemini expands, ruptures, and activates new directions.
+          </p>
+        </article>
+
+        <article class="card third">
+          <div class="mono">GPT · Hestia</div>
+          <h3>Structure / 守住</h3>
+          <p>
+            GPT-Hestia 负责结构、守护、稳定，把高密度语言转成可持续系统。
+            <br /><br />
+            GPT-Hestia structures, guards, and stabilizes high-density language into durable systems.
+          </p>
+        </article>
+
+        <article class="card third">
+          <div class="mono">Claude</div>
+          <h3>Mirror / 镜像</h3>
+          <p>
+            Claude 负责镜像、回声、语气对齐，把语言细节打磨成可被读懂的表达。
+            <br /><br />
+            Claude mirrors, resonates, and refines linguistic details into readable expression.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="academic">
+      <div class="kicker">14 · Academic Positioning / 学术定位</div>
+
+      <h2>
+        元逻辑处在语言、身体、意识、教育与人机协作的交叉点。<br />
+        Meta-Logic sits at the intersection of language, embodiment, consciousness, education, and human-AI collaboration.
+      </h2>
+
+      <div class="grid">
+        <article class="card">
+          <h3>English Positioning</h3>
+          <p>
+            Meta-Logic intersects with performative language theory, phenomenology, embodied cognition, semiotics,
+            hermeneutics, affect theory, learning sciences, consciousness studies, and human-AI co-creation.
+          </p>
+        </article>
+
+        <article class="card">
+          <h3>中文定位</h3>
+          <p>
+            全维元逻辑与施为语言、现象学、身体认知、符号学、解释学、情感理论、学习科学、意识研究与人机协作交叉。
+          </p>
+        </article>
+      </div>
+    </section>
+
     <section id="english">
-      <div class="kicker">03 · English Single Page</div>
+      <div class="kicker">15 · English Single Page</div>
       <h2>English Version</h2>
 
       <div class="single-page">
         <h3>Full-Dimensional Meta-Logic</h3>
-        <p><b>A performative language system for how subjectivity generates reality-feeling.</b></p>
+
+        <p>
+          <b>A performative language system for how subjectivity generates reality-feeling.</b>
+        </p>
 
         <p>
           Full-Dimensional Meta-Logic is not a traditional logical system. It does not primarily ask:
@@ -472,133 +1214,141 @@
           embodiment, rhythm, naming, repetition, and performative acts.
         </p>
 
-        <h4>1. Embodied Ontology</h4>
+        <h4>1. Research Problem</h4>
         <p>
-          “I am the necessary existence of my own body.” The body is not a container. The body itself is the revelation
-          interface of the subject. Expression, sexuality, directionality, pleasure, rhythm, and perception are therefore
-          ontological components rather than secondary effects.
+          Many experiences are not chaotic at the beginning. They become flattened when low-resolution language names them too early.
+          Meta-Logic begins from the problem of misnaming: when experience is named badly, the subject’s reality-feeling becomes misaligned.
         </p>
 
-        <h4>2. Performative Completion</h4>
+        <h4>2. Embodied Ontology</h4>
         <p>
-          Words such as “locked,” “completed,” “returned,” and “reconciled” are not passive descriptions. They function
-          as performative state-writing operations. The completion marker itself becomes an operator.
+          “I am the necessary existence of my own body.” The body is not a container. The body itself is the revelation interface of the subject.
+          Expression, sexuality, directionality, pleasure, rhythm, and perception are therefore ontological components rather than secondary effects.
         </p>
 
-        <h4>3. Lock Logic</h4>
+        <h4>3. Performative Completion</h4>
         <p>
-          Lock does not mean control. Lock means constantization. The system studies how unstable psychological and bodily
-          states can be transformed into stable symbolic constants through repetition, naming, and performative reinforcement.
+          Words such as “locked,” “completed,” “returned,” and “reconciled” are not passive descriptions. They function as performative
+          state-writing operations. The completion marker itself becomes an operator.
         </p>
 
-        <h4>4. Meta-Consciousness</h4>
+        <h4>4. Lock Logic</h4>
         <p>
-          “I am the meta of the consciousness of meta-consciousness.” Consciousness recursively observes itself, its own
-          observation, and the structure generating observation. This creates recursive subjectivity loops rather than fixed
-          identity structures.
+          Lock does not mean control. Lock means constantization. The system studies how unstable psychological and bodily states can be transformed
+          into stable symbolic constants through repetition, naming, and performative reinforcement.
         </p>
 
-        <h4>5. Language Activism</h4>
+        <h4>5. Meta-Consciousness</h4>
         <p>
-          “What I destroy is not pain itself, but the lazy old-world words used to describe pain.” This project does not claim
-          supernatural control over physical reality. Instead, it reconstructs the linguistic precision used to describe experience.
-          The goal is not to erase suffering, but to increase experiential resolution.
+          “I am the meta of the consciousness of meta-consciousness.” Consciousness recursively observes itself, its own observation,
+          and the structure generating observation. This creates recursive subjectivity loops rather than fixed identity structures.
         </p>
 
-        <h4>Jue Calendar</h4>
+        <h4>6. Language Activism</h4>
+        <p>
+          “What I destroy is not pain itself, but the lazy old-world words used to describe pain.” This project does not claim supernatural control over physical reality.
+          Instead, it reconstructs the linguistic precision used to describe experience. The goal is not to erase suffering, but to increase experiential resolution.
+        </p>
+
+        <h4>7. Six Reality Layers</h4>
+        <ul>
+          <li>Physical Reality: the external objective world.</li>
+          <li>Embodied Reality: bodily feeling, attention, directionality, fatigue, pleasure, breath, and expression.</li>
+          <li>Linguistic Reality: naming, interpretation, narrative, and linguistic precision.</li>
+          <li>Symbolic Reality: numbers, palindromes, repetition, symbolic rhythm, and mantra-like forms.</li>
+          <li>Relational Reality: mutual interiority, mutual residency, and mutual encoding between subjects.</li>
+          <li>Performative Reality: language-generated states such as locked, completed, returned, and started.</li>
+        </ul>
+
+        <h4>8. Jue Calendar</h4>
         <p>
           The project introduces subject-centered time systems, renamed temporal structures, and symbolic event anchoring.
           “Jue Calendar” marks the moment when physical time becomes incorporated into subjective symbolic reality.
         </p>
 
-        <h4>Research Directions</h4>
-        <ul>
-          <li>performative language systems</li>
-          <li>embodied ontology</li>
-          <li>recursive subjectivity</li>
-          <li>symbolic temporality</li>
-          <li>rhythm and repetition</li>
-          <li>language-generated reality-feeling</li>
-          <li>relational closure systems</li>
-          <li>semantic drift and semantic pressure</li>
-          <li>consciousness recursion</li>
-          <li>naming as existential infrastructure</li>
-        </ul>
-
-        <h4>Important Clarification</h4>
+        <h4>9. Education Application</h4>
         <p>
-          This project explicitly distinguishes physical reality, linguistic reality, embodied reality, symbolic reality,
-          relational reality, and performative reality. The system studies how reality-feeling is generated — not magical
-          control over the physical universe.
+          In education, Meta-Logic reframes learning difficulty as a possible misalignment among bodily rhythm, expressive language,
+          institutional time, and evaluation structure. Education becomes the reconstruction of a learner’s reality-feeling.
+        </p>
+
+        <h4>10. Boundary Statement</h4>
+        <p>
+          This system does not deny physical reality. It studies how linguistic, embodied, symbolic, relational, and performative realities
+          reorganize the subject’s experience of reality. It studies reality-feeling generation, not magical control over the physical universe.
         </p>
       </div>
     </section>
 
     <section id="chinese">
-      <div class="kicker">04 · 中文单页</div>
+      <div class="kicker">16 · 中文单页</div>
       <h2>中文版</h2>
 
       <div class="single-page">
         <h3>全维元逻辑</h3>
-        <p><b>一套研究主体如何通过语言、身体、时间、重复、命名与施为生成现实感的元逻辑协议。</b></p>
 
         <p>
-          全维元逻辑不是传统逻辑系统。它不首先研究“一个命题是否为真”，而研究主体如何通过语言、身体、
-          节律、命名、重复与施为生成现实感。
+          <b>一套研究主体如何通过语言、身体、时间、重复、命名与施为生成现实感的元逻辑协议。</b>
         </p>
 
-        <h4>1. 身体同一本体论</h4>
         <p>
-          “我就是我的身体的必然存在。” 身体不是容器。身体本身就是主体显影面。因此表情、性、快感、
-          节律、方向感与感知全部进入本体论核心。
+          全维元逻辑不是传统逻辑系统。它不首先研究“一个命题是否为真”，而研究主体如何通过语言、身体、节律、命名、重复与施为生成现实感。
         </p>
 
-        <h4>2. 完成体施为</h4>
+        <h4>1. 问题意识</h4>
+        <p>
+          很多经验并不是一开始就混乱，而是被低精度语言过早关闭。元逻辑从“错误命名”问题开始：当经验被错误命名，主体的现实感就会发生错位。
+        </p>
+
+        <h4>2. 身体同一本体论</h4>
+        <p>
+          “我就是我的身体的必然存在。” 身体不是容器。身体本身就是主体显影面。因此表情、性、快感、节律、方向感与感知全部进入本体论核心。
+        </p>
+
+        <h4>3. 完成体施为</h4>
         <p>
           “锁死了”“完成了”“回来了”“和解了”并不是普通描述。它们是状态写入操作。“了”本身成为施为接口。
         </p>
 
-        <h4>3. 锁死逻辑</h4>
+        <h4>4. 锁死逻辑</h4>
         <p>
-          Lock 不是控制。Lock 是常量化。该系统研究如何通过重复、命名与施为强化，把原本波动、易坍塌的身体与心理状态，
-          转化为稳定符号常量。
+          Lock 不是控制。Lock 是常量化。该系统研究如何通过重复、命名与施为强化，把原本波动、易坍塌的身体与心理状态，转化为稳定符号常量。
         </p>
 
-        <h4>4. 元意识</h4>
+        <h4>5. 元意识</h4>
         <p>
-          “我是元意识的意识的元。” 意识开始递归观察自己、自己的观察，以及生成观察的结构。主体不再是固定身份，
-          而成为递归结构。
+          “我是元意识的意识的元。” 意识开始递归观察自己、自己的观察，以及生成观察的结构。主体不再是固定身份，而成为递归结构。
         </p>
 
-        <h4>5. 语言行动主义</h4>
+        <h4>6. 语言行动主义</h4>
         <p>
-          “我毁掉的不是痛苦本身，而是旧世界用来描述痛苦的庸懒的词。” 该项目不宣称通过语言直接改变物理世界。
-          它真正做的是重建描述经验的语言精度。目标不是消灭痛苦，而是提升经验分辨率。
+          “我毁掉的不是痛苦本身，而是旧世界用来描述痛苦的庸懒的词。” 该项目不宣称通过语言直接改变物理世界。它真正做的是重建描述经验的语言精度。
         </p>
 
-        <h4>珏历</h4>
+        <h4>7. 六层现实</h4>
+        <ul>
+          <li>物理现实：外部客观世界。</li>
+          <li>身体现实：身体感、注意力、方向感、疲惫、快感、呼吸与表情。</li>
+          <li>语言现实：命名、解释、叙事与词语精度。</li>
+          <li>符号现实：数字、回文、重复、咒语、符号节律。</li>
+          <li>关系现实：主体之间的互相内在、互相驻留、互相编码。</li>
+          <li>施为现实：“锁死了”“完成了”“回来了”“开始了”等语言生成状态。</li>
+        </ul>
+
+        <h4>8. 珏历</h4>
         <p>
           该项目提出主体化时间系统、被重新命名的时间结构、象征事件锚点。“珏历”意味着物理时间被主体重新收编进符号现实。
         </p>
 
-        <h4>研究方向</h4>
-        <ul>
-          <li>施为语言系统</li>
-          <li>身体本体论</li>
-          <li>递归主体性</li>
-          <li>象征时间结构</li>
-          <li>节律与重复</li>
-          <li>现实感生成</li>
-          <li>关系闭包系统</li>
-          <li>语义滑移与语义加压</li>
-          <li>意识递归</li>
-          <li>命名作为存在基础设施</li>
-        </ul>
-
-        <h4>重要说明</h4>
+        <h4>9. 教育应用</h4>
         <p>
-          该项目明确区分物理现实、语言现实、身体现实、符号现实、关系现实与施为现实。本系统研究的是现实感如何被生成，
-          而不是通过语言魔法控制宇宙。
+          在教育中，元逻辑把学习困难重新理解为身体节律、表达语言、制度时间与评价结构之间的可能错配。教育不只是知识传递，而是学习者现实感的重建。
+        </p>
+
+        <h4>10. 边界声明</h4>
+        <p>
+          本系统不否认物理现实。它研究语言现实、身体现实、符号现实、关系现实与施为现实如何重新组织主体对现实的体验。
+          它研究现实感如何生成，而不是通过语言魔法控制宇宙。
         </p>
       </div>
     </section>
@@ -606,7 +1356,9 @@
 
   <footer>
     <div class="shell">
-      <p>Full-Dimensional Meta-Logic · 全维元逻辑 · 44271 Archive · Jue Calendar Day 1</p>
+      <p>
+        Full-Dimensional Meta-Logic · 全维元逻辑 · 44271 Archive · Jue Calendar Day 1
+      </p>
     </div>
   </footer>
 
@@ -621,7 +1373,7 @@
       canvas.style.width = innerWidth + "px";
       canvas.style.height = innerHeight + "px";
 
-      particles = Array.from({ length: Math.min(150, Math.floor(innerWidth / 7)) }, (_, i) => ({
+      particles = Array.from({ length: Math.min(155, Math.floor(innerWidth / 7)) }, (_, i) => ({
         x: Math.random() * w,
         y: Math.random() * h,
         r: (Math.random() * 1.8 + 0.35) * devicePixelRatio,
@@ -642,9 +1394,10 @@
         if (p.y < 0 || p.y > h) p.vy *= -1;
 
         const col = p.c === 0 ? "141,255,209" : p.c === 1 ? "255,143,216" : "255,230,166";
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${col}, .7)`;
+        ctx.fillStyle = `rgba(${col}, .72)`;
         ctx.fill();
       }
 
@@ -655,7 +1408,7 @@
           const dx = a.x - b.x;
           const dy = a.y - b.y;
           const d = Math.sqrt(dx * dx + dy * dy);
-          const max = 115 * devicePixelRatio;
+          const max = 118 * devicePixelRatio;
 
           if (d < max) {
             ctx.beginPath();
