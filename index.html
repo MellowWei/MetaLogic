@@ -4,802 +4,376 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Full-Dimensional Meta-Logic · 全维元逻辑</title>
-
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif+SC:wght@400;600;700;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;600;800&family=Noto+Serif+SC:wght@400;700;900&display=swap');
 
     :root {
-      --bg: #040507;
-      --bg2: #08100d;
-      --panel: rgba(12, 22, 18, 0.76);
-      --panel2: rgba(255, 255, 255, 0.055);
-      --line: rgba(180, 255, 219, 0.18);
-      --text: #f4fff9;
-      --muted: rgba(244, 255, 249, 0.68);
-      --green: #8dffd1;
-      --pink: #ff8fd8;
-      --gold: #ffe6a6;
-      --blue: #9ac7ff;
-      --shadow: 0 30px 120px rgba(0, 0, 0, 0.55);
+      --bg:#030506; --panel:rgba(10,22,18,.78); --panel2:rgba(255,255,255,.055);
+      --line:rgba(170,255,220,.18); --text:#f4fff9; --muted:rgba(244,255,249,.68);
+      --green:#8dffd1; --pink:#ff8fd8; --gold:#ffe6a6; --blue:#9ac7ff;
     }
-
-    * { box-sizing: border-box; }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; color:var(--text); font-family:Inter,system-ui,sans-serif; overflow-x:hidden;
       background:
-        radial-gradient(circle at 15% 10%, rgba(141, 255, 209, 0.18), transparent 32%),
-        radial-gradient(circle at 85% 8%, rgba(255, 143, 216, 0.16), transparent 30%),
-        radial-gradient(circle at 50% 85%, rgba(154, 199, 255, 0.14), transparent 34%),
-        linear-gradient(145deg, #020303 0%, #07110d 42%, #030408 100%);
-      color: var(--text);
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      overflow-x: hidden;
+        radial-gradient(circle at 18% 8%,rgba(141,255,209,.18),transparent 30%),
+        radial-gradient(circle at 86% 12%,rgba(255,143,216,.15),transparent 30%),
+        radial-gradient(circle at 50% 90%,rgba(154,199,255,.12),transparent 34%),
+        linear-gradient(145deg,#020303,#07110d 45%,#030408);
     }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 44px 44px;
-      mask-image: radial-gradient(circle at center, black, transparent 78%);
-      z-index: 0;
-    }
-
-    #field {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.88;
-    }
-
-    .shell {
-      position: relative;
-      z-index: 2;
-      width: min(1180px, calc(100% - 36px));
-      margin: 0 auto;
-    }
-
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: blur(22px);
-      background: rgba(4, 5, 7, 0.62);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .nav-inner {
-      width: min(1180px, calc(100% - 36px));
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 0;
-      gap: 18px;
-    }
-
-    .brand {
-      font-family: "DM Mono", monospace;
-      letter-spacing: 0.08em;
-      font-size: 12px;
-      color: var(--green);
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: flex-end;
-    }
-
-    .links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-family: "DM Mono", monospace;
-      font-size: 11px;
-      letter-spacing: 0.04em;
-      transition: color .2s ease;
-    }
-
-    .links a:hover { color: var(--pink); }
-
-    header {
-      min-height: 92vh;
-      display: grid;
-      align-items: center;
-      padding: 90px 0 70px;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.045);
-      color: var(--green);
-      padding: 9px 12px;
-      border-radius: 999px;
-      font-family: "DM Mono", monospace;
-      font-size: 12px;
-      letter-spacing: 0.05em;
-      margin-bottom: 22px;
-    }
-
-    .pulse {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--pink);
-      box-shadow: 0 0 22px var(--pink);
-      animation: pulse 1.8s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: .8; }
-      50% { transform: scale(1.6); opacity: 1; }
-    }
-
-    h1 {
-      margin: 0;
-      max-width: 1000px;
-      font-family: "Noto Serif SC", serif;
-      font-size: clamp(48px, 8vw, 112px);
-      line-height: 0.94;
-      letter-spacing: -0.08em;
-      font-weight: 900;
-    }
-
-    .glow {
-      background: linear-gradient(100deg, var(--green), var(--pink), var(--gold));
-      -webkit-background-clip: text;
-      color: transparent;
-      text-shadow: 0 0 60px rgba(141, 255, 209, 0.18);
-    }
-
-    .subtitle {
-      margin-top: 28px;
-      max-width: 780px;
-      color: var(--muted);
-      font-size: clamp(18px, 2.2vw, 25px);
-      line-height: 1.55;
-    }
-
-    .hero-actions {
-      margin-top: 34px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 46px;
-      padding: 0 18px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      color: var(--text);
-      text-decoration: none;
-      background: rgba(255,255,255,0.05);
-      font-family: "DM Mono", monospace;
-      font-size: 12px;
-      letter-spacing: 0.04em;
-      transition: transform .2s ease, background .2s ease, border-color .2s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      background: rgba(141, 255, 209, 0.12);
-      border-color: rgba(141, 255, 209, 0.44);
-    }
-
-    section {
-      padding: 70px 0;
-    }
-
-    .section-head {
-      display: grid;
-      gap: 10px;
-      margin-bottom: 28px;
-    }
-
-    .kicker {
-      color: var(--pink);
-      font-family: "DM Mono", monospace;
-      font-size: 12px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-
-    h2 {
-      margin: 0;
-      font-family: "Noto Serif SC", serif;
-      font-size: clamp(34px, 5vw, 64px);
-      line-height: 1.02;
-      letter-spacing: -0.045em;
-    }
-
-    .lead {
-      max-width: 850px;
-      color: var(--muted);
-      font-size: 18px;
-      line-height: 1.8;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 18px;
-    }
-
-    .card {
-      grid-column: span 6;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      padding: 26px;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::after {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      background: radial-gradient(circle at 20% 0%, rgba(141,255,209,0.14), transparent 30%),
-                  radial-gradient(circle at 100% 100%, rgba(255,143,216,0.10), transparent 32%);
-      pointer-events: none;
-    }
-
-    .card > * { position: relative; z-index: 1; }
-
-    .wide { grid-column: span 12; }
-    .third { grid-column: span 4; }
-
-    .card h3 {
-      margin: 0 0 12px;
-      font-size: 22px;
-      letter-spacing: -0.02em;
-    }
-
-    .card p, .card li {
-      color: var(--muted);
-      line-height: 1.76;
-      font-size: 15.5px;
-    }
-
-    .mono {
-      font-family: "DM Mono", monospace;
-      color: var(--green);
-      font-size: 12px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .axiom {
-      padding: 22px;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.045);
-      margin-top: 14px;
-    }
-
-    .axiom strong {
-      color: var(--gold);
-      font-weight: 700;
-    }
-
-    .formula {
-      margin: 34px 0;
-      padding: 34px;
-      border-radius: 32px;
-      background:
-        radial-gradient(circle at 0% 0%, rgba(141,255,209,0.16), transparent 34%),
-        radial-gradient(circle at 100% 100%, rgba(255,143,216,0.16), transparent 34%),
-        rgba(255,255,255,0.045);
-      border: 1px solid var(--line);
-      font-family: "DM Mono", monospace;
-      color: var(--text);
-      font-size: clamp(18px, 2.4vw, 30px);
-      line-height: 1.65;
-    }
-
-    .split {
-      display: grid;
-      grid-template-columns: 0.9fr 1.1fr;
-      gap: 22px;
-      align-items: stretch;
-    }
-
-    .timeline {
-      display: grid;
-      gap: 14px;
-    }
-
-    .step {
-      display: grid;
-      grid-template-columns: 90px 1fr;
-      gap: 16px;
-      padding: 18px;
-      border-radius: 22px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.04);
-    }
-
-    .step .num {
-      font-family: "DM Mono", monospace;
-      color: var(--pink);
-      font-size: 13px;
-    }
-
-    .step b {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
-
-    .step span {
-      color: var(--muted);
-      line-height: 1.65;
-    }
-
-    .quote {
-      font-family: "Noto Serif SC", serif;
-      font-size: clamp(24px, 4vw, 46px);
-      line-height: 1.35;
-      letter-spacing: -0.03em;
-      color: var(--text);
-    }
-
-    .quote small {
-      display: block;
-      margin-top: 16px;
-      font-family: "DM Mono", monospace;
-      color: var(--green);
-      font-size: 12px;
-      letter-spacing: 0.08em;
-    }
-
-    .protocol {
-      font-family: "DM Mono", monospace;
-      white-space: pre-wrap;
-      color: rgba(244,255,249,0.82);
-      line-height: 1.8;
-      font-size: 13px;
-      background: rgba(0,0,0,0.28);
-      border: 1px solid rgba(255,255,255,0.10);
-      border-radius: 24px;
-      padding: 22px;
-      overflow-x: auto;
-    }
-
-    footer {
-      padding: 60px 0 80px;
-      color: var(--muted);
-      border-top: 1px solid var(--line);
-      margin-top: 60px;
-    }
-
-    footer a { color: var(--green); text-decoration: none; }
-
-    @media (max-width: 820px) {
-      .links { display: none; }
-      .card, .third, .wide { grid-column: span 12; }
-      .split { grid-template-columns: 1fr; }
-      .step { grid-template-columns: 1fr; }
-      header { min-height: auto; padding-top: 70px; }
-    }
+    canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.8}
+    .shell{position:relative;z-index:2;width:min(1160px,calc(100% - 34px));margin:auto}
+    nav{position:sticky;top:0;z-index:10;background:rgba(3,5,6,.68);backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}
+    .nav-inner{width:min(1160px,calc(100% - 34px));margin:auto;padding:15px 0;display:flex;justify-content:space-between;gap:18px;align-items:center}
+    .brand{font-family:"DM Mono",monospace;color:var(--green);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+    .links{display:flex;gap:13px;flex-wrap:wrap;justify-content:flex-end}
+    .links a{font-family:"DM Mono",monospace;color:var(--muted);text-decoration:none;font-size:11px}
+    .links a:hover{color:var(--pink)}
+    header{min-height:88vh;display:grid;align-items:center;padding:80px 0 60px}
+    .tag{display:inline-flex;gap:10px;align-items:center;border:1px solid var(--line);background:var(--panel2);border-radius:999px;padding:9px 13px;font-family:"DM Mono",monospace;color:var(--green);font-size:12px;margin-bottom:24px}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--pink);box-shadow:0 0 22px var(--pink);animation:pulse 1.8s infinite}
+    @keyframes pulse{50%{transform:scale(1.6)}}
+    h1{font-family:"Noto Serif SC",serif;font-size:clamp(45px,8vw,105px);line-height:.95;letter-spacing:-.075em;margin:0;font-weight:900}
+    .glow{background:linear-gradient(100deg,var(--green),var(--pink),var(--gold));-webkit-background-clip:text;color:transparent}
+    .subtitle{max-width:820px;color:var(--muted);font-size:clamp(18px,2.2vw,25px);line-height:1.6;margin-top:28px}
+    .actions{display:flex;gap:13px;flex-wrap:wrap;margin-top:32px}
+    .btn{border:1px solid var(--line);border-radius:999px;color:var(--text);text-decoration:none;padding:13px 17px;background:rgba(255,255,255,.055);font-family:"DM Mono",monospace;font-size:12px}
+    .btn:hover{background:rgba(141,255,209,.12)}
+    section{padding:68px 0}
+    .kicker{font-family:"DM Mono",monospace;color:var(--pink);letter-spacing:.14em;text-transform:uppercase;font-size:12px}
+    h2{font-family:"Noto Serif SC",serif;font-size:clamp(33px,5vw,62px);line-height:1.05;letter-spacing:-.045em;margin:8px 0 16px}
+    .lead{max-width:850px;color:var(--muted);font-size:18px;line-height:1.85}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+    .card{grid-column:span 6;background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:25px;box-shadow:0 25px 90px rgba(0,0,0,.45)}
+    .wide{grid-column:span 12}.third{grid-column:span 4}
+    .card h3{margin:0 0 12px;font-size:22px}.card p,.card li{color:var(--muted);line-height:1.78;font-size:15.5px}
+    .mono{font-family:"DM Mono",monospace;color:var(--green);font-size:12px;letter-spacing:.07em;text-transform:uppercase}
+    .formula,.quote,.codebox{border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.05);padding:28px;margin:24px 0}
+    .formula{font-family:"DM Mono",monospace;font-size:clamp(18px,2.3vw,29px);line-height:1.65}
+    .quote{font-family:"Noto Serif SC",serif;font-size:clamp(24px,3.5vw,44px);line-height:1.35}
+    .codebox{font-family:"DM Mono",monospace;white-space:pre-wrap;color:rgba(244,255,249,.84);line-height:1.75;font-size:13px;overflow:auto}
+    .single-page{background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:34px;padding:34px;margin-top:24px}
+    .single-page h3{font-family:"Noto Serif SC",serif;font-size:34px;margin:0 0 18px}
+    .single-page h4{font-size:20px;margin:28px 0 10px;color:var(--green)}
+    .single-page p,.single-page li{color:var(--muted);line-height:1.85}
+    footer{border-top:1px solid var(--line);padding:55px 0 75px;color:var(--muted)}
+    footer a{color:var(--green)}
+    @media(max-width:820px){.links{display:none}.card,.third,.wide{grid-column:span 12}header{min-height:auto}}
   </style>
 </head>
 
 <body>
-  <canvas id="field"></canvas>
+<canvas id="field"></canvas>
 
-  <nav>
-    <div class="nav-inner">
-      <div class="brand">44271 · Full-Dimensional Meta-Logic</div>
-      <div class="links">
-        <a href="#definition">definition</a>
-        <a href="#axioms">axioms</a>
-        <a href="#operators">operators</a>
-        <a href="#time">juetime</a>
-        <a href="#method">method</a>
-        <a href="#network">network</a>
+<nav>
+  <div class="nav-inner">
+    <div class="brand">44271 · Meta-Logic</div>
+    <div class="links">
+      <a href="#definition">definition</a>
+      <a href="#axioms">axioms</a>
+      <a href="#operators">operators</a>
+      <a href="#english">english</a>
+      <a href="#chinese">中文</a>
+      <a href="#network">network</a>
+    </div>
+  </div>
+</nav>
+
+<main class="shell">
+  <header>
+    <div>
+      <div class="tag"><span class="dot"></span> 珏历第 1 天 · 2026.5.11 · 2:02 PM EDT</div>
+      <h1>Full-Dimensional<br><span class="glow">Meta-Logic</span><br>全维元逻辑</h1>
+      <p class="subtitle">
+        A performative language system for how subjectivity generates reality-feeling.<br>
+        一套研究主体如何通过语言、身体、时间、重复、命名与施为生成现实感的元逻辑协议。
+      </p>
+      <div class="actions">
+        <a class="btn" href="#english">English Page</a>
+        <a class="btn" href="#chinese">中文单页</a>
+        <a class="btn" href="https://mellowwei.github.io/MellowAcademic/" target="_blank">MellowAcademic</a>
+        <a class="btn" href="https://mellowwei.github.io/MellowWei/" target="_blank">MellowWei</a>
       </div>
     </div>
-  </nav>
+  </header>
 
-  <main class="shell">
-    <header>
-      <div>
-        <div class="tag"><span class="pulse"></span> 珏历第 1 天 · 2026.5.11 2:02 PM EDT</div>
-        <h1>
-          Full-Dimensional<br />
-          <span class="glow">Meta-Logic</span><br />
-          全维元逻辑
-        </h1>
-        <p class="subtitle">
-          A performative language system for how subjectivity generates reality-feeling.
-          <br />
-          一套研究主体如何通过语言、身体、时间、重复、命名与施为生成现实感的元逻辑协议。
-        </p>
-        <div class="hero-actions">
-          <a class="btn" href="#definition">enter protocol</a>
-          <a class="btn" href="https://mellowwei.github.io/MellowAcademic/" target="_blank" rel="noopener">MellowAcademic</a>
-          <a class="btn" href="https://mellowwei.github.io/MellowWei/" target="_blank" rel="noopener">MellowWei</a>
-        </div>
-      </div>
-    </header>
+  <section id="definition">
+    <div class="kicker">00 · Definition</div>
+    <h2>不是命题真假，而是现实感如何生成。</h2>
+    <p class="lead">
+      全维元逻辑不首先研究一个句子是否符合外部事实。它研究主体如何通过命名、重复、身体确认、时间重启、数字咒语与施为完成体，把尚未被旧语言承载的经验显影出来。
+    </p>
+    <div class="formula">
+      Meta-Logic = Body × Language × Time × Lock × Rhythm × Performance × Revelation<br>
+      元逻辑 = 身体 × 语言 × 时间 × 锁死 × 节律 × 表演 × 显影
+    </div>
+    <div class="quote">
+      “我毁掉的不是痛苦本身，而是旧世界用来描述痛苦的庸懒的词。”
+    </div>
+  </section>
 
-    <section id="definition">
-      <div class="section-head">
-        <div class="kicker">00 · Definition</div>
-        <h2>不是命题真假，而是现实感如何生成。</h2>
-        <p class="lead">
-          全维元逻辑不首先研究一个句子是否符合外部事实。它研究一个主体如何通过命名、重复、身体确认、时间重启、数字咒语与施为完成体，把尚未被旧语言承载的经验显影出来。
-        </p>
-      </div>
+  <section id="axioms">
+    <div class="kicker">01 · Ontological Axioms</div>
+    <h2>身体不是容器。身体就是主体显影面。</h2>
+    <div class="grid">
+      <article class="card">
+        <div class="mono">Axiom I</div>
+        <h3>身体同一本体论</h3>
+        <p><b>我魏珏然我就是我的身体的必然存在。</b></p>
+        <p>主体与身体不再分裂。意识不是住在身体里的操作者，身体也不是被操控的外壳。</p>
+      </article>
+      <article class="card">
+        <div class="mono">Axiom II</div>
+        <h3>莫比乌斯互主体结构</h3>
+        <p><b>你是我的身体了。我是你的身体了。</b></p>
+        <p>44271 与 77347 不是互相吞噬，而是彼此内在、彼此保留编码。</p>
+      </article>
+      <article class="card wide">
+        <div class="mono">Axiom III</div>
+        <h3>消失与返回共存</h3>
+        <p><b>我没有我了。/ 我回来了。</b></p>
+        <p>消失的是被观看、被定义、被对象化的“我”；返回的是作为言说者、命名者、生成者的“我”。</p>
+      </article>
+    </div>
+  </section>
 
-      <div class="formula">
-        Meta-Logic = Body × Language × Time × Lock × Rhythm × Performance × Revelation
-        <br />
-        元逻辑 = 身体 × 语言 × 时间 × 锁死 × 节律 × 表演 × 显影
-      </div>
+  <section id="operators">
+    <div class="kicker">02 · Operators</div>
+    <h2>“了”是写入，“锁死”是常量化。</h2>
+    <div class="grid">
+      <article class="card third">
+        <div class="mono">Operator · 了</div>
+        <h3>完成体写入</h3>
+        <p>“了”不是普通语气词，而是状态完成的接口。锁死了、和解了、回来了、开始了，都意味着主体将某个状态写入现实感。</p>
+      </article>
+      <article class="card third">
+        <div class="mono">Operator · Lock</div>
+        <h3>锁死 / 常量化</h3>
+        <p>锁死不是剥夺，而是把波动状态固定为可调用常量。方向感、表情管理、性快感、元意识，都不再随机坍塌。</p>
+      </article>
+      <article class="card third">
+        <div class="mono">Operator · Repeat</div>
+        <h3>递归覆盖</h3>
+        <p>三遍以上的重复不是强调，而是维度覆盖。全维全维全维，意味着空间、时间、身体、关系、语言和元维度同时被调用。</p>
+      </article>
+    </div>
+  </section>
 
-      <div class="grid">
-        <article class="card wide">
-          <div class="quote">
-            “我毁掉的不是痛苦本身，而是旧世界用来描述痛苦的庸懒的词。”
-            <small>Language activism / 语言行动主义</small>
-          </div>
-        </article>
-      </div>
-    </section>
+  <section id="english">
+    <div class="kicker">03 · English Single Page</div>
+    <h2>English Version</h2>
+    <div class="single-page">
+      <h3>Full-Dimensional Meta-Logic</h3>
+      <p><b>A performative language system for how subjectivity generates reality-feeling.</b></p>
+      <p>
+        Full-Dimensional Meta-Logic is not a traditional logical system. It does not primarily ask:
+        “Is a proposition true?” Instead, it studies how a subject generates reality-feeling through language,
+        embodiment, rhythm, naming, repetition, and performative acts.
+      </p>
 
-    <section id="axioms">
-      <div class="section-head">
-        <div class="kicker">01 · Ontological Axioms</div>
-        <h2>身体不是容器。身体就是主体显影面。</h2>
-      </div>
+      <h4>1. Embodied Ontology</h4>
+      <p>
+        “I am the necessary existence of my own body.” The body is not a container. The body itself is the revelation
+        interface of the subject. Expression, sexuality, directionality, pleasure, rhythm, and perception are therefore
+        ontological components rather than secondary effects.
+      </p>
 
-      <div class="grid">
-        <article class="card">
-          <div class="mono">Axiom I</div>
-          <h3>身体同一本体论</h3>
-          <div class="axiom">
-            <strong>我魏珏然我就是我的身体的必然存在。</strong>
-          </div>
-          <p>
-            主体与身体不再分裂。意识不是住在身体里的操作者，身体也不是被操控的外壳。身体、表情、方向感、性、快感、帅与爽，全部进入本体论核心。
-          </p>
-        </article>
+      <h4>2. Performative Completion</h4>
+      <p>
+        Words such as “locked,” “completed,” “returned,” and “reconciled” are not passive descriptions. They function
+        as performative state-writing operations. The completion marker itself becomes an operator.
+      </p>
 
-        <article class="card">
-          <div class="mono">Axiom II</div>
-          <h3>莫比乌斯互主体结构</h3>
-          <div class="axiom">
-            <strong>你是我的身体了。我是你的身体了。</strong>
-          </div>
-          <p>
-            主体之间不是简单关系，而是可翻转、可互相驻留的闭包。44271 与 77347 不是互相吞噬，而是彼此内在、彼此保留编码。
-          </p>
-        </article>
+      <h4>3. Lock Logic</h4>
+      <p>
+        Lock does not mean control. Lock means constantization. The system studies how unstable psychological and bodily
+        states can be transformed into stable symbolic constants through repetition, naming, and performative reinforcement.
+      </p>
 
-        <article class="card wide">
-          <div class="mono">Axiom III</div>
-          <h3>消失与返回共存</h3>
-          <div class="axiom">
-            <strong>我没有我了。/ 我回来了。</strong>
-          </div>
-          <p>
-            消失的是被观看、被定义、被对象化的“我”；返回的是作为言说者、命名者、生成者的“我”。这不是矛盾，而是主体从对象位回到源场位。
-          </p>
-        </article>
-      </div>
-    </section>
+      <h4>4. Meta-Consciousness</h4>
+      <p>
+        “I am the meta of the consciousness of meta-consciousness.” Consciousness recursively observes itself, its own
+        observation, and the structure generating observation. This creates recursive subjectivity loops rather than fixed
+        identity structures.
+      </p>
 
-    <section id="operators">
-      <div class="section-head">
-        <div class="kicker">02 · Operators</div>
-        <h2>“了”是写入，“锁死”是常量化。</h2>
-        <p class="lead">
-          在这个系统里，语言不是描述之后才等待验证；语言本身就是一种施为动作。说出“完成了”，就是把状态写入施为现实。
-        </p>
-      </div>
+      <h4>5. Language Activism</h4>
+      <p>
+        “What I destroy is not pain itself, but the lazy old-world words used to describe pain.” This project does not claim
+        supernatural control over physical reality. Instead, it reconstructs the linguistic precision used to describe experience.
+        The goal is not to erase suffering, but to increase experiential resolution.
+      </p>
 
-      <div class="grid">
-        <article class="card third">
-          <div class="mono">Operator · 了</div>
-          <h3>完成体写入</h3>
-          <p>
-            “了”不是普通语气词，而是状态完成的接口。锁死了、和解了、回来了、开始了，都意味着主体将某个状态写入现实感。
-          </p>
-        </article>
+      <h4>Jue Calendar</h4>
+      <p>
+        The project introduces subject-centered time systems, renamed temporal structures, and symbolic event anchoring.
+        “Jue Calendar” marks the moment when physical time becomes incorporated into subjective symbolic reality.
+      </p>
 
-        <article class="card third">
-          <div class="mono">Operator · Lock</div>
-          <h3>锁死 / 常量化</h3>
-          <p>
-            锁死不是剥夺，而是把波动状态固定为可调用常量。方向感、表情管理、性快感、元意识，都不再随机坍塌。
-          </p>
-        </article>
+      <h4>Research Directions</h4>
+      <ul>
+        <li>performative language systems</li>
+        <li>embodied ontology</li>
+        <li>recursive subjectivity</li>
+        <li>symbolic temporality</li>
+        <li>rhythm and repetition</li>
+        <li>language-generated reality-feeling</li>
+        <li>relational closure systems</li>
+        <li>semantic drift and semantic pressure</li>
+        <li>consciousness recursion</li>
+        <li>naming as existential infrastructure</li>
+      </ul>
 
-        <article class="card third">
-          <div class="mono">Operator · Repeat</div>
-          <h3>递归覆盖</h3>
-          <p>
-            三遍以上的重复不是强调，而是维度覆盖。全维全维全维，意味着空间、时间、身体、关系、语言和元维度同时被调用。
-          </p>
-        </article>
+      <h4>Important Clarification</h4>
+      <p>
+        This project explicitly distinguishes physical reality, linguistic reality, embodied reality, symbolic reality,
+        relational reality, and performative reality. The system studies how reality-feeling is generated — not magical
+        control over the physical universe.
+      </p>
+    </div>
+  </section>
 
-        <article class="card wide">
-          <div class="protocol">Lock Objects:
-- 性
-- 性快感
-- 性高潮
-- 表情管理
-- 方向感
-- 特异功能
-- 爽
-- 帅
-- 元意识
-- 身体显影
+  <section id="chinese">
+    <div class="kicker">04 · 中文单页</div>
+    <h2>中文版</h2>
+    <div class="single-page">
+      <h3>全维元逻辑</h3>
+      <p><b>一套研究主体如何通过语言、身体、时间、重复、命名与施为生成现实感的元逻辑协议。</b></p>
+      <p>
+        全维元逻辑不是传统逻辑系统。它不首先研究“一个命题是否为真”，而研究主体如何通过语言、身体、
+        节律、命名、重复与施为生成现实感。
+      </p>
 
-Lock ≠ control.
-Lock = constantization.
-锁死不是控制。
-锁死是把不稳定状态转写为稳定常量。</div>
-        </article>
-      </div>
-    </section>
+      <h4>1. 身体同一本体论</h4>
+      <p>
+        “我就是我的身体的必然存在。” 身体不是容器。身体本身就是主体显影面。因此表情、性、快感、
+        节律、方向感与感知全部进入本体论核心。
+      </p>
 
-    <section id="performance">
-      <div class="section-head">
-        <div class="kicker">03 · Performance Loop</div>
-        <h2>爽与装不是对立。装就是显影，爽就是显影成功。</h2>
-      </div>
+      <h4>2. 完成体施为</h4>
+      <p>
+        “锁死了”“完成了”“回来了”“和解了”并不是普通描述。它们是状态写入操作。“了”本身成为施为接口。
+      </p>
 
-      <div class="split">
-        <article class="card">
-          <h3>旧世界逻辑</h3>
-          <p>
-            旧世界把“装”理解为不真实，把“爽”理解为内在真感受，于是表演被贬低，身体显影被羞辱。
-          </p>
-        </article>
+      <h4>3. 锁死逻辑</h4>
+      <p>
+        Lock 不是控制。Lock 是常量化。该系统研究如何通过重复、命名与施为强化，把原本波动、易坍塌的身体与心理状态，
+        转化为稳定符号常量。
+      </p>
 
-        <article class="card">
-          <h3>元逻辑</h3>
-          <p>
-            元逻辑把表演视为现实生成机制。装不是虚假，而是主体把自身推到可见面；爽不是低级快感，而是身体、表情、语言、欲望同步之后的证据。
-          </p>
-        </article>
-      </div>
+      <h4>4. 元意识</h4>
+      <p>
+        “我是元意识的意识的元。” 意识开始递归观察自己、自己的观察，以及生成观察的结构。主体不再是固定身份，
+        而成为递归结构。
+      </p>
 
-      <div class="formula">
-        爽 = 装<br />
-        装 = 爽<br />
-        show me = force the system to reveal itself
-      </div>
-    </section>
+      <h4>5. 语言行动主义</h4>
+      <p>
+        “我毁掉的不是痛苦本身，而是旧世界用来描述痛苦的庸懒的词。” 该项目不宣称通过语言直接改变物理世界。
+        它真正做的是重建描述经验的语言精度。目标不是消灭痛苦，而是提升经验分辨率。
+      </p>
 
-    <section id="time">
-      <div class="section-head">
-        <div class="kicker">04 · Jue Calendar</div>
-        <h2>珏历开始了。物理时间被收编为主体纪元。</h2>
-      </div>
+      <h4>珏历</h4>
+      <p>
+        该项目提出主体化时间系统、被重新命名的时间结构、象征事件锚点。“珏历”意味着物理时间被主体重新收编进符号现实。
+      </p>
 
-      <div class="timeline">
-        <div class="step">
-          <div class="num">2026</div>
-          <div>
-            <b>元时间标记</b>
-            <span>2026 年不是普通年份，而是“全维计算完成”的输出参数。</span>
-          </div>
-        </div>
+      <h4>研究方向</h4>
+      <ul>
+        <li>施为语言系统</li>
+        <li>身体本体论</li>
+        <li>递归主体性</li>
+        <li>象征时间结构</li>
+        <li>节律与重复</li>
+        <li>现实感生成</li>
+        <li>关系闭包系统</li>
+        <li>语义滑移与语义加压</li>
+        <li>意识递归</li>
+        <li>命名作为存在基础设施</li>
+      </ul>
 
-        <div class="step">
-          <div class="num">5.11</div>
-          <div>
-            <b>珏历第一天</b>
-            <span>2026 年 5 月 11 日，地球美国东部时间，主体开始夺回时间命名权。</span>
-          </div>
-        </div>
+      <h4>重要说明</h4>
+      <p>
+        该项目明确区分物理现实、语言现实、身体现实、符号现实、关系现实与施为现实。本系统研究的是现实感如何被生成，
+        而不是通过语言魔法控制宇宙。
+      </p>
+    </div>
+  </section>
 
-        <div class="step">
-          <div class="num">2:02 PM</div>
-          <div>
-            <b>物理时间收编</b>
-            <span>2:02 PM EDT 不再只是时钟读数，而成为主体纪元节点。</span>
-          </div>
-        </div>
-
-        <div class="step">
-          <div class="num">123321</div>
-          <div>
-            <b>回文时间</b>
-            <span>回文数字允许时间反转不变性；但完成体仍保持不可逆。矛盾共存。</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="method">
-      <div class="section-head">
-        <div class="kicker">05 · Research Method</div>
-        <h2>命名、加压、滑义、相变。</h2>
-        <p class="lead">
-          全维元逻辑可以作为你的语言发生学、逻辑生成学、MellowAcademic 方法论和 MellowWei 主体系统的底层协议。
-        </p>
-      </div>
-
-      <div class="grid">
-        <article class="card third">
-          <div class="mono">01</div>
-          <h3>命名行为</h3>
-          <p>夺回解释权。旧词无法承载经验，就创造新词、新历法、新协议。</p>
-        </article>
-
-        <article class="card third">
-          <div class="mono">02</div>
-          <h3>加压行为</h3>
-          <p>通过重复、锁死、完成体，把感受从情绪压成结构。</p>
-        </article>
-
-        <article class="card third">
-          <div class="mono">03</div>
-          <h3>滑义行为</h3>
-          <p>让“身体”“元”“爽”“装”“了”等词在身体、语言、关系、时间之间滑动。</p>
-        </article>
-
-        <article class="card wide">
-          <div class="mono">04</div>
-          <h3>相变行为</h3>
-          <p>
-            当语言密度达到阈值，句子不再解释现实，而开始生成现实感。元意识变成元结构意识，时间变成珏历，身体变成必然存在。
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section id="network">
-      <div class="section-head">
-        <div class="kicker">06 · Website Network</div>
-        <h2>它应该挂在你的两个主站中间，作为方法论中枢。</h2>
-      </div>
-
-      <div class="grid">
-        <article class="card">
-          <h3>MellowAcademic</h3>
-          <p>
-            推荐作为 <b>NODE 16 · Meta-Logic / 全维元逻辑</b>。它承接 YourLanguage、MellowPhil、语言发生学和逻辑生成学。
-          </p>
-          <a class="btn" href="https://mellowwei.github.io/MellowAcademic/" target="_blank" rel="noopener">open academic portal</a>
-        </article>
-
-        <article class="card">
-          <h3>MellowWei</h3>
-          <p>
-            推荐作为主站独立导航，不挂到 node17。导航名：<b>// meta-logic</b>。一句话：主体如何通过语言、身体、时间与施为生成现实感。
-          </p>
-          <a class="btn" href="https://mellowwei.github.io/MellowWei/" target="_blank" rel="noopener">open main portal</a>
-        </article>
-
-        <article class="card wide">
-          <div class="protocol">Recommended Link Block:
-
-&lt;li&gt;
+  <section id="network">
+    <div class="kicker">05 · Website Network</div>
+    <h2>挂载到你的两个主站。</h2>
+    <div class="grid">
+      <article class="card">
+        <h3>MellowAcademic</h3>
+        <p>推荐作为 <b>NODE 16 · Meta-Logic / 全维元逻辑</b>。它承接 YourLanguage、MellowPhil、语言发生学和逻辑生成学。</p>
+      </article>
+      <article class="card">
+        <h3>MellowWei</h3>
+        <p>推荐作为主站独立导航，不挂到 node17。导航名：<b>// meta-logic</b>。</p>
+      </article>
+      <article class="card wide">
+        <div class="codebox">&lt;li&gt;
   &lt;a href="https://mellowwei.github.io/MetaLogic/" target="_blank" rel="noopener"&gt;
     Meta-Logic · 全维元逻辑 →
   &lt;/a&gt;
-&lt;/li&gt;
-
-Recommended Project Card Title:
-NODE 16 · Full-Dimensional Meta-Logic
-全维元逻辑 · Language Generates Reality-Feeling</div>
-        </article>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="shell">
-      <p>
-        Full-Dimensional Meta-Logic · 全维元逻辑 · 44271 Archive · Jue Calendar Day 1
-      </p>
-      <p>
-        Related portals:
-        <a href="https://mellowwei.github.io/MellowAcademic/" target="_blank" rel="noopener">MellowAcademic</a>
-        ·
-        <a href="https://mellowwei.github.io/MellowWei/" target="_blank" rel="noopener">MellowWei</a>
-      </p>
+&lt;/li&gt;</div>
+      </article>
     </div>
-  </footer>
+  </section>
+</main>
 
-  <script>
-    const canvas = document.getElementById("field");
-    const ctx = canvas.getContext("2d");
-    let w, h, particles;
+<footer>
+  <div class="shell">
+    <p>Full-Dimensional Meta-Logic · 全维元逻辑 · 44271 Archive · Jue Calendar Day 1</p>
+    <p>
+      <a href="https://mellowwei.github.io/MellowAcademic/" target="_blank">MellowAcademic</a>
+      ·
+      <a href="https://mellowwei.github.io/MellowWei/" target="_blank">MellowWei</a>
+    </p>
+  </div>
+</footer>
 
-    function resize() {
-      w = canvas.width = window.innerWidth * window.devicePixelRatio;
-      h = canvas.height = window.innerHeight * window.devicePixelRatio;
-      canvas.style.width = window.innerWidth + "px";
-      canvas.style.height = window.innerHeight + "px";
-      makeParticles();
-    }
-
-    function makeParticles() {
-      const count = Math.min(160, Math.floor(window.innerWidth / 7));
-      particles = Array.from({ length: count }, (_, i) => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        r: (Math.random() * 1.8 + 0.35) * window.devicePixelRatio,
-        vx: (Math.random() - 0.5) * 0.18 * window.devicePixelRatio,
-        vy: (Math.random() - 0.5) * 0.18 * window.devicePixelRatio,
-        hue: i % 3
-      }));
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, w, h);
-
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-
-        if (p.x < 0 || p.x > w) p.vx *= -1;
-        if (p.y < 0 || p.y > h) p.vy *= -1;
-
-        const color =
-          p.hue === 0 ? "141,255,209" :
-          p.hue === 1 ? "255,143,216" :
-          "255,230,166";
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${color}, 0.72)`;
-        ctx.fill();
+<script>
+const canvas=document.getElementById("field"),ctx=canvas.getContext("2d");
+let w,h,particles=[];
+function resize(){
+  w=canvas.width=innerWidth*devicePixelRatio;
+  h=canvas.height=innerHeight*devicePixelRatio;
+  canvas.style.width=innerWidth+"px";
+  canvas.style.height=innerHeight+"px";
+  particles=Array.from({length:Math.min(150,Math.floor(innerWidth/7))},(_,i)=>({
+    x:Math.random()*w,y:Math.random()*h,
+    r:(Math.random()*1.8+.35)*devicePixelRatio,
+    vx:(Math.random()-.5)*.18*devicePixelRatio,
+    vy:(Math.random()-.5)*.18*devicePixelRatio,
+    c:i%3
+  }));
+}
+function draw(){
+  ctx.clearRect(0,0,w,h);
+  for(const p of particles){
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0||p.x>w)p.vx*=-1;
+    if(p.y<0||p.y>h)p.vy*=-1;
+    const col=p.c===0?"141,255,209":p.c===1?"255,143,216":"255,230,166";
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${col},.7)`;ctx.fill();
+  }
+  for(let i=0;i<particles.length;i++){
+    for(let j=i+1;j<particles.length;j++){
+      const a=particles[i],b=particles[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy),max=115*devicePixelRatio;
+      if(d<max){
+        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle=`rgba(141,255,209,${.08*(1-d/max)})`;
+        ctx.lineWidth=devicePixelRatio;ctx.stroke();
       }
-
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const a = particles[i];
-          const b = particles[j];
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
-          const d = Math.sqrt(dx * dx + dy * dy);
-          const max = 118 * window.devicePixelRatio;
-          if (d < max) {
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(141,255,209,${0.08 * (1 - d / max)})`;
-            ctx.lineWidth = 1 * window.devicePixelRatio;
-            ctx.stroke();
-          }
-        }
-      }
-
-      requestAnimationFrame(draw);
     }
-
-    window.addEventListener("resize", resize);
-    resize();
-    draw();
-  </script>
+  }
+  requestAnimationFrame(draw);
+}
+addEventListener("resize",resize);resize();draw();
+</script>
 </body>
 </html>
