@@ -1,1432 +1,717 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>Full-Dimensional Meta-Logic · 全维元逻辑</title>
-
-  <meta
-    name="description"
-    content="Full-Dimensional Meta-Logic · 全维元逻辑：一套研究主体如何通过语言、身体、时间、重复、命名与施为生成现实感的元逻辑协议。"
-  />
-
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif+SC:wght@400;600;700;900&display=swap');
-
-    :root {
-      --bg: #030506;
-      --bg2: #07110d;
-      --panel: rgba(10, 22, 18, 0.78);
-      --panel2: rgba(255, 255, 255, 0.055);
-      --panel3: rgba(0, 0, 0, 0.22);
-      --line: rgba(170, 255, 220, 0.18);
-      --line-strong: rgba(170, 255, 220, 0.34);
-      --text: #f4fff9;
-      --muted: rgba(244, 255, 249, 0.68);
-      --faint: rgba(244, 255, 249, 0.46);
-      --green: #8dffd1;
-      --pink: #ff8fd8;
-      --gold: #ffe6a6;
-      --blue: #9ac7ff;
-      --shadow: 0 25px 90px rgba(0, 0, 0, 0.45);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      color: var(--text);
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      overflow-x: hidden;
-      background:
-        radial-gradient(circle at 18% 8%, rgba(141, 255, 209, 0.18), transparent 30%),
-        radial-gradient(circle at 86% 12%, rgba(255, 143, 216, 0.15), transparent 30%),
-        radial-gradient(circle at 50% 90%, rgba(154, 199, 255, 0.12), transparent 34%),
-        linear-gradient(145deg, #020303, #07110d 45%, #030408);
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 42px 42px;
-      mask-image: radial-gradient(circle at center, black, transparent 80%);
-    }
-
-    canvas {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.82;
-    }
-
-    .shell {
-      position: relative;
-      z-index: 2;
-      width: min(1160px, calc(100% - 34px));
-      margin: auto;
-    }
-
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: rgba(3, 5, 6, 0.72);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .nav-inner {
-      width: min(1160px, calc(100% - 34px));
-      margin: auto;
-      padding: 15px 0;
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      align-items: center;
-    }
-
-    .brand {
-      font-family: "DM Mono", monospace;
-      color: var(--green);
-      font-size: 12px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .links {
-      display: flex;
-      gap: 13px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .links a {
-      font-family: "DM Mono", monospace;
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 11px;
-      letter-spacing: 0.05em;
-      transition: color 0.2s ease, opacity 0.2s ease;
-    }
-
-    .links a:hover {
-      color: var(--pink);
-    }
-
-    header {
-      min-height: 88vh;
-      display: grid;
-      align-items: center;
-      padding: 82px 0 64px;
-    }
-
-    .tag {
-      display: inline-flex;
-      gap: 10px;
-      align-items: center;
-      border: 1px solid var(--line);
-      background: var(--panel2);
-      border-radius: 999px;
-      padding: 9px 13px;
-      font-family: "DM Mono", monospace;
-      color: var(--green);
-      font-size: 12px;
-      margin-bottom: 24px;
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--pink);
-      box-shadow: 0 0 22px var(--pink);
-      animation: pulse 1.8s infinite;
-    }
-
-    @keyframes pulse {
-      50% {
-        transform: scale(1.6);
-        opacity: 0.75;
-      }
-    }
-
-    h1 {
-      font-family: "Noto Serif SC", serif;
-      font-size: clamp(45px, 8vw, 105px);
-      line-height: 0.95;
-      letter-spacing: -0.075em;
-      margin: 0;
-      font-weight: 900;
-    }
-
-    .glow {
-      background: linear-gradient(100deg, var(--green), var(--pink), var(--gold));
-      -webkit-background-clip: text;
-      color: transparent;
-    }
-
-    .subtitle {
-      max-width: 900px;
-      color: var(--muted);
-      font-size: clamp(18px, 2.2vw, 25px);
-      line-height: 1.6;
-      margin-top: 28px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 13px;
-      flex-wrap: wrap;
-      margin-top: 32px;
-    }
-
-    .btn {
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--text);
-      text-decoration: none;
-      padding: 13px 17px;
-      background: rgba(255, 255, 255, 0.055);
-      font-family: "DM Mono", monospace;
-      font-size: 12px;
-      letter-spacing: 0.04em;
-      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      background: rgba(141, 255, 209, 0.12);
-      border-color: var(--line-strong);
-    }
-
-    section {
-      padding: 70px 0;
-      scroll-margin-top: 84px;
-    }
-
-    .kicker {
-      font-family: "DM Mono", monospace;
-      color: var(--pink);
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      font-size: 12px;
-      margin-bottom: 10px;
-    }
-
-    h2 {
-      font-family: "Noto Serif SC", serif;
-      font-size: clamp(33px, 5vw, 62px);
-      line-height: 1.05;
-      letter-spacing: -0.045em;
-      margin: 8px 0 16px;
-      font-weight: 900;
-    }
-
-    .lead {
-      max-width: 930px;
-      color: var(--muted);
-      font-size: 18px;
-      line-height: 1.85;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 18px;
-      margin-top: 24px;
-    }
-
-    .card {
-      grid-column: span 6;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      padding: 25px;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::after {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      background:
-        radial-gradient(circle at 10% 0%, rgba(141, 255, 209, 0.12), transparent 30%),
-        radial-gradient(circle at 100% 100%, rgba(255, 143, 216, 0.09), transparent 32%);
-      pointer-events: none;
-    }
-
-    .card > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .wide {
-      grid-column: span 12;
-    }
-
-    .third {
-      grid-column: span 4;
-    }
-
-    .quarter {
-      grid-column: span 3;
-    }
-
-    .card h3 {
-      margin: 0 0 12px;
-      font-size: 22px;
-      line-height: 1.25;
-      letter-spacing: -0.02em;
-    }
-
-    .card p,
-    .card li {
-      color: var(--muted);
-      line-height: 1.78;
-      font-size: 15.5px;
-    }
-
-    .mono {
-      font-family: "DM Mono", monospace;
-      color: var(--green);
-      font-size: 12px;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
-    .formula,
-    .quote,
-    .codebox {
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 28px;
-      margin: 24px 0;
-      box-shadow: var(--shadow);
-    }
-
-    .formula {
-      font-family: "DM Mono", monospace;
-      font-size: clamp(18px, 2.3vw, 29px);
-      line-height: 1.65;
-    }
-
-    .quote {
-      font-family: "Noto Serif SC", serif;
-      font-size: clamp(24px, 3.5vw, 44px);
-      line-height: 1.35;
-      letter-spacing: -0.03em;
-    }
-
-    .codebox {
-      font-family: "DM Mono", monospace;
-      white-space: pre-wrap;
-      color: rgba(244, 255, 249, 0.84);
-      line-height: 1.75;
-      font-size: 13px;
-      overflow: auto;
-    }
-
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-top: 24px;
-    }
-
-    .mini-label {
-      color: var(--gold);
-      font-family: "DM Mono", monospace;
-      font-size: 11px;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .single-page {
-      background: var(--panel3);
-      border: 1px solid var(--line);
-      border-radius: 34px;
-      padding: 34px;
-      margin-top: 24px;
-      box-shadow: var(--shadow);
-    }
-
-    .single-page h3 {
-      font-family: "Noto Serif SC", serif;
-      font-size: 34px;
-      margin: 0 0 18px;
-      letter-spacing: -0.035em;
-    }
-
-    .single-page h4 {
-      font-size: 20px;
-      margin: 28px 0 10px;
-      color: var(--green);
-    }
-
-    .single-page p,
-    .single-page li {
-      color: var(--muted);
-      line-height: 1.85;
-    }
-
-    .table {
-      display: grid;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: 170px 1fr 1fr;
-      gap: 14px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.045);
-      border-radius: 20px;
-      padding: 16px;
-    }
-
-    .row strong {
-      color: var(--green);
-      font-family: "DM Mono", monospace;
-      font-size: 12px;
-      letter-spacing: 0.04em;
-    }
-
-    .row span {
-      color: var(--muted);
-      line-height: 1.65;
-      font-size: 14px;
-    }
-
-    .case-list {
-      display: grid;
-      gap: 14px;
-      margin-top: 20px;
-    }
-
-    .case-item {
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.045);
-      border-radius: 22px;
-      padding: 18px;
-    }
-
-    .case-item b {
-      display: block;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-
-    .case-item span {
-      color: var(--muted);
-      line-height: 1.7;
-      display: block;
-    }
-
-    footer {
-      border-top: 1px solid var(--line);
-      padding: 55px 0 75px;
-      color: var(--muted);
-    }
-
-    footer a {
-      color: var(--green);
-      text-decoration: none;
-    }
-
-    @media (max-width: 980px) {
-      .quarter {
-        grid-column: span 6;
-      }
-
-      .row {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 820px) {
-      .links {
-        display: none;
-      }
-
-      .card,
-      .third,
-      .quarter,
-      .wide {
-        grid-column: span 12;
-      }
-
-      header {
-        min-height: auto;
-      }
-
-      .two-col {
-        grid-template-columns: 1fr;
-      }
-
-      .single-page {
-        padding: 24px;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Meta-Logic v1 / 元逻辑 v1 — A philosophical framework by Mellow Jueran Wei" />
+<title>Meta-Logic v1 · 元逻辑 · Mellow Jueran Wei</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Noto+Serif+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+:root{
+  --paper:#1c0f08;
+  --paper-deep:#0a0604;
+  --ink:#fff2d8;
+  --ink-soft:rgba(255,242,216,.78);
+  --ink-dim:rgba(255,242,216,.5);
+  --amber:#f7c76a;
+  --amber-deep:#c99a43;
+  --rose:#b85b6a;
+  --rose-soft:#e58a9a;
+  --line:rgba(247,199,106,.22);
+  --line-soft:rgba(247,199,106,.10);
+  --serif-en:"Cormorant Garamond", Georgia, serif;
+  --serif-zh:"Noto Serif SC", "Songti SC", serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--paper-deep);overflow-x:hidden}
+body{
+  color:var(--ink);
+  font-family:var(--serif-zh);
+  line-height:1.85;
+  overflow-x:hidden;
+  background:
+    radial-gradient(circle at 20% 5%, rgba(247,199,106,.16), transparent 25%),
+    radial-gradient(circle at 80% 15%, rgba(184,91,106,.12), transparent 30%),
+    radial-gradient(circle at 50% 90%, rgba(247,199,106,.08), transparent 40%),
+    linear-gradient(120deg, #0a0604 0%, #1c0f08 40%, #251609 70%, #100805 100%);
+  min-height:100vh;
+}
+
+body::before{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;z-index:-3;opacity:.4;
+  background:
+    repeating-linear-gradient(95deg, rgba(255,255,255,.02) 0 1px, transparent 1px 6px),
+    repeating-linear-gradient(0deg, rgba(40,15,8,.2) 0 2px, transparent 2px 8px);
+  mix-blend-mode:screen;
+}
+
+body::after{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;z-index:-2;
+  background:
+    linear-gradient(to right, rgba(0,0,0,.4), transparent 15%, transparent 85%, rgba(0,0,0,.4)),
+    radial-gradient(circle at center, transparent 0%, rgba(0,0,0,.15) 65%, rgba(0,0,0,.55) 100%);
+}
+
+.border-frame{
+  position:fixed;inset:18px;
+  border:1px solid rgba(247,199,106,.16);
+  border-radius:20px;
+  pointer-events:none;z-index:20;
+  box-shadow: inset 0 0 30px rgba(247,199,106,.03);
+}
+.border-frame::before, .border-frame::after{
+  content:"✦";
+  position:absolute;
+  color:rgba(247,199,106,.4);
+  font-size:14px;
+  text-shadow:0 0 12px rgba(247,199,106,.5);
+}
+.border-frame::before{left:16px;top:10px}
+.border-frame::after{right:16px;bottom:10px}
+
+nav{
+  position:fixed;top:24px;left:50%;
+  transform:translateX(-50%);
+  width:min(1080px, calc(100% - 60px));
+  z-index:30;
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;padding:10px 18px;
+  border:1px solid rgba(247,199,106,.16);
+  border-radius:999px;
+  background:rgba(28,15,8,.6);
+  backdrop-filter:blur(14px);
+  box-shadow:0 12px 40px rgba(0,0,0,.3);
+}
+.brand{
+  display:flex;align-items:center;gap:10px;
+  color:var(--ink);text-decoration:none;
+  font-family:var(--serif-en);font-size:14px;letter-spacing:.04em;
+  white-space:nowrap;
+}
+.brand-mark{
+  width:24px;height:24px;border-radius:50%;flex-shrink:0;
+  background:
+    radial-gradient(circle at 40% 35%, #fff8e8 0 4%, transparent 12%),
+    radial-gradient(circle at 50% 50%, rgba(247,199,106,.9), rgba(184,91,106,.55) 55%, rgba(70,32,20,.3) 74%);
+  box-shadow:0 0 14px rgba(247,199,106,.28);
+}
+.nav-links{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.nav-links a{
+  color:var(--ink-soft);text-decoration:none;
+  font-family:var(--serif-en);font-size:12px;
+  padding:5px 9px;border-radius:999px;
+  transition:.25s;letter-spacing:.03em;
+  white-space:nowrap;
+}
+.nav-links a:hover{color:var(--ink);background:rgba(247,199,106,.08)}
+
+section{padding:84px 0;position:relative;width:100%}
+
+.page{
+  width:100%;
+  max-width:1080px;
+  margin:0 auto;
+  padding:0 clamp(20px, 5vw, 80px);
+}
+
+.cover{
+  min-height:100vh;
+  display:grid;place-items:center;
+  padding-top:140px;padding-bottom:80px;
+}
+.cover-inner{position:relative;width:100%;padding:40px 0}
+
+.inscription{
+  display:inline-flex;align-items:center;gap:12px;
+  color:rgba(247,199,106,.7);
+  font-family:var(--serif-en);
+  font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+  margin-bottom:24px;
+}
+.inscription::before{
+  content:"";
+  width:32px;height:1px;
+  background:linear-gradient(to right, transparent, rgba(247,199,106,.6));
+}
+
+h1{
+  font-family:var(--serif-zh);
+  font-size:clamp(42px, 7vw, 88px);
+  line-height:1.05;
+  font-weight:500;
+  letter-spacing:-.05em;
+  color:#fff7e0;
+  text-shadow:
+    0 0 12px rgba(255,247,229,.18),
+    0 0 36px rgba(247,199,106,.18),
+    0 0 70px rgba(184,91,106,.10);
+  margin-bottom:20px;
+  word-break:keep-all;
+  overflow-wrap:break-word;
+}
+h1 .en-title{
+  display:block;
+  font-family:var(--serif-en);
+  font-weight:500;
+  letter-spacing:-.02em;
+  color:#ffe5b1;
+  font-size:.56em;
+  margin-top:14px;
+  font-style:italic;
+}
+h1 .version{
+  display:block;
+  font-family:var(--serif-en);
+  font-weight:400;
+  font-size:.22em;
+  letter-spacing:.18em;
+  color:rgba(247,199,106,.7);
+  margin-top:18px;
+  text-transform:uppercase;
+}
+
+.cover-subtitle{
+  max-width:780px;
+  color:var(--ink-soft);
+  font-size:clamp(15px, 1.7vw, 21px);
+  margin:24px 0 28px;
+  line-height:1.8;
+  word-break:break-word;
+  overflow-wrap:break-word;
+}
+.cover-subtitle .en{
+  display:block;
+  font-family:var(--serif-en);
+  font-style:italic;
+  font-size:1em;
+  color:rgba(255,226,187,.7);
+  margin-top:10px;
+}
+
+.cover-axiom{
+  max-width:880px;
+  border:1px solid rgba(247,199,106,.28);
+  border-radius:4px 26px 4px 26px;
+  padding:24px 28px;
+  background:
+    linear-gradient(135deg, rgba(247,199,106,.08), rgba(184,91,106,.03)),
+    rgba(40,22,14,.32);
+  margin-top:14px;
+}
+.cover-axiom-label{
+  font-family:var(--serif-en);
+  color:rgba(247,199,106,.7);
+  letter-spacing:.16em;text-transform:uppercase;
+  font-size:11px;margin-bottom:10px;
+}
+.cover-axiom-cn{
+  font-size:clamp(16px, 2vw, 26px);
+  line-height:1.4;font-weight:600;
+  color:#fff6df;
+  text-shadow:0 0 18px rgba(247,199,106,.14);
+  word-break:break-word;
+}
+.cover-axiom-en{
+  font-family:var(--serif-en);
+  font-style:italic;
+  font-size:clamp(14px, 1.5vw, 19px);
+  line-height:1.4;margin-top:10px;
+  color:#f7c76a;
+}
+
+.scroll-cue{
+  margin-top:40px;
+  color:rgba(255,242,216,.45);
+  font-family:var(--serif-en);font-style:italic;
+  letter-spacing:.06em;font-size:13px;
+}
+
+.chapter-head{margin-bottom:32px;position:relative}
+.chapter-kicker{
+  color:rgba(247,199,106,.65);
+  font-family:var(--serif-en);
+  letter-spacing:.18em;text-transform:uppercase;
+  font-size:12px;margin-bottom:10px;
+}
+h2{
+  font-size:clamp(28px, 4vw, 56px);
+  line-height:1.1;font-weight:500;
+  letter-spacing:-.03em;
+  color:#fff0cd;
+  text-shadow:0 0 20px rgba(247,199,106,.12);
+  margin-bottom:8px;
+  word-break:keep-all;
+}
+h2 .en{
+  display:block;
+  font-family:var(--serif-en);
+  font-size:.48em;letter-spacing:-.01em;
+  color:rgba(247,199,106,.78);
+  font-style:italic;margin-top:6px;
+}
+
+.prose{
+  position:relative;
+  padding:28px clamp(20px, 4vw, 32px);
+  border-left:1px solid rgba(247,199,106,.28);
+  border-right:1px solid rgba(247,199,106,.08);
+  background:
+    linear-gradient(90deg, rgba(247,199,106,.04), transparent 34%),
+    rgba(23,11,7,.16);
+}
+.prose::before{
+  content:"";
+  position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(to right, rgba(247,199,106,.32), transparent);
+}
+.prose p{
+  font-size:clamp(14px, 1.2vw, 18px);
+  color:var(--ink-soft);
+  margin-bottom:16px;
+  word-break:break-word;
+}
+.prose .en{
+  font-family:var(--serif-en);font-style:italic;
+  font-size:clamp(14px, 1.25vw, 18px);
+  color:rgba(255,222,184,.66);
+}
+
+.proposition-wrap{display:grid;gap:26px;margin-top:24px}
+.proposition{
+  position:relative;display:grid;
+  grid-template-columns:80px 1fr;gap:20px;
+  padding:clamp(20px, 4vw, 28px);
+  border:1px solid rgba(247,199,106,.18);
+  border-radius:38px 4px 38px 4px;
+  background:
+    radial-gradient(circle at 10% 12%, rgba(247,199,106,.09), transparent 28%),
+    radial-gradient(circle at 95% 80%, rgba(184,91,106,.06), transparent 34%),
+    rgba(34,17,11,.28);
+  box-shadow:0 18px 50px rgba(0,0,0,.28);
+}
+.prop-num{
+  font-family:var(--serif-en);
+  font-size:clamp(38px, 5vw, 54px);line-height:1;
+  color:rgba(247,199,106,.82);
+  text-shadow:0 0 24px rgba(247,199,106,.16);
+}
+.prop-content{min-width:0}
+.prop-content h3{
+  font-size:clamp(18px, 2vw, 28px);
+  line-height:1.2;
+  color:#fff3da;font-weight:500;
+  margin-bottom:4px;
+  word-break:break-word;
+}
+.prop-content h3 .en{
+  display:block;
+  font-family:var(--serif-en);
+  color:#f7c76a;font-size:.6em;font-style:italic;
+  letter-spacing:0;margin-top:4px;
+}
+.prop-content p{
+  font-size:clamp(14px, 1.2vw, 16px);
+  color:var(--ink-soft);
+  margin-top:12px;line-height:1.85;
+  word-break:break-word;
+}
+.prop-content .enp{
+  font-family:var(--serif-en);font-style:italic;
+  color:rgba(255,222,184,.66);
+  font-size:clamp(14px, 1.2vw, 16px);
+  margin-top:8px;
+}
+
+.key-line{
+  margin-top:24px;padding:20px 22px;
+  border:1px solid rgba(247,199,106,.22);
+  background:rgba(247,199,106,.04);
+  color:#fff5dc;
+  font-size:clamp(15px, 1.8vw, 24px);
+  line-height:1.4;font-weight:500;
+  text-shadow:0 0 18px rgba(247,199,106,.12);
+  word-break:break-word;
+}
+.key-line .en{
+  display:block;margin-top:8px;
+  color:#f7c76a;
+  font-family:var(--serif-en);font-style:italic;
+  font-size:.74em;font-weight:400;
+}
+
+.hard-problem-wrap{
+  margin-top:24px;padding:clamp(22px, 4vw, 32px);
+  border:1px solid rgba(247,199,106,.2);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(247,199,106,.09), transparent 60%),
+    rgba(38,18,12,.32);
+}
+.hard-problem-wrap .label{
+  font-family:var(--serif-en);
+  font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;
+  color:rgba(184,91,106,.78);
+  margin-bottom:12px;
+}
+.hard-problem-wrap .position-cn{
+  font-size:clamp(15px, 1.4vw, 19px);
+  color:var(--ink);line-height:1.9;
+  margin-bottom:14px;
+  word-break:break-word;
+}
+.hard-problem-wrap .position-en{
+  font-family:var(--serif-en);font-style:italic;
+  font-size:clamp(14px, 1.3vw, 18px);
+  color:rgba(255,222,184,.7);
+  line-height:1.7;
+}
+.hard-problem-wrap .signature{
+  margin-top:18px;padding-top:14px;
+  border-top:1px solid rgba(247,199,106,.16);
+  color:rgba(247,199,106,.7);
+  font-family:var(--serif-en);font-style:italic;
+  font-size:14px;
+}
+
+.v2-path{
+  margin-top:24px;
+  display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+  gap:18px;
+}
+.v2-item{
+  padding:clamp(18px, 3vw, 24px);
+  border:1px solid rgba(247,199,106,.18);
+  background:rgba(34,17,11,.3);
+  border-radius:2px 18px 2px 18px;
+}
+.v2-num{
+  font-family:var(--serif-en);
+  font-size:26px;color:rgba(247,199,106,.6);
+  margin-bottom:8px;
+}
+.v2-title{
+  font-size:18px;color:#fff0ce;
+  font-weight:500;margin-bottom:4px;
+  word-break:break-word;
+}
+.v2-title .en{
+  display:block;
+  font-family:var(--serif-en);font-style:italic;
+  font-size:14px;color:#f7c76a;margin-top:2px;
+}
+.v2-item p{
+  font-size:14px;color:var(--ink-soft);
+  line-height:1.8;margin-top:10px;
+  word-break:break-word;
+}
+.v2-item .enp{
+  font-family:var(--serif-en);font-style:italic;
+  color:rgba(255,222,184,.6);
+  font-size:13px;margin-top:8px;
+}
+
+.inner-layer-portal{
+  margin-top:28px;padding:clamp(22px, 4vw, 36px) clamp(20px, 4vw, 32px);
+  border:2px dashed rgba(184,91,106,.3);
+  background:
+    linear-gradient(135deg, rgba(184,91,106,.05), transparent),
+    rgba(20,10,7,.3);
+  border-radius:8px;
+}
+.portal-label{
+  font-family:var(--serif-en);
+  font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;
+  color:rgba(184,91,106,.8);
+  margin-bottom:14px;
+}
+.portal-title{
+  font-size:22px;color:#fff0ce;
+  font-weight:500;margin-bottom:10px;
+}
+.portal-title .en{
+  display:block;
+  font-family:var(--serif-en);font-style:italic;
+  font-size:15px;color:#e58a9a;margin-top:4px;
+}
+.portal-warning{
+  font-size:clamp(14px, 1.3vw, 15px);
+  color:var(--ink-soft);
+  line-height:1.85;margin:10px 0;
+  word-break:break-word;
+}
+.portal-warning .en{
+  display:block;
+  font-family:var(--serif-en);font-style:italic;
+  color:rgba(255,222,184,.6);
+  margin-top:6px;
+}
+.portal-status{
+  margin-top:14px;padding-top:14px;
+  border-top:1px solid rgba(184,91,106,.18);
+  color:rgba(184,91,106,.65);
+  font-family:var(--serif-en);
+  font-size:13px;font-style:italic;
+  letter-spacing:.05em;
+}
+
+footer{
+  padding:48px 0 64px;
+  margin-top:80px;
+  border-top:1px solid rgba(247,199,106,.12);
+  color:rgba(255,242,216,.4);
+  font-family:var(--serif-en);
+  text-align:center;font-size:13px;
+  line-height:1.7;
+}
+footer a{
+  color:rgba(247,199,106,.6);text-decoration:none;
+}
+footer a:hover{color:#f7c76a}
+
+.reveal{
+  opacity:0;transform:translateY(24px);filter:blur(2px);
+  transition:opacity .9s ease, transform .9s ease, filter .9s ease;
+}
+.reveal.visible{opacity:1;transform:translateY(0);filter:blur(0)}
+
+@media (max-width:980px){
+  .proposition{grid-template-columns:1fr;gap:8px}
+  .prop-num{font-size:42px}
+  nav{
+    width:calc(100% - 32px);
+    border-radius:18px;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+    padding:12px 16px;
+  }
+  .nav-links{justify-content:flex-start;width:100%}
+  section{padding:64px 0}
+  .cover{padding-top:170px}
+}
+
+@media (max-width:600px){
+  .border-frame{inset:8px;border-radius:14px}
+  .page{padding:0 16px}
+  nav{width:calc(100% - 20px);top:14px;padding:10px 14px}
+  .nav-links a{font-size:11px;padding:4px 7px}
+  h1{font-size:clamp(38px, 11vw, 50px);letter-spacing:-.04em}
+  h1 .en-title{font-size:.5em}
+  .cover{padding-top:180px}
+}
+</style>
 </head>
 
 <body>
-  <canvas id="field"></canvas>
 
-  <nav>
-    <div class="nav-inner">
-      <div class="brand">44271 · Full-Dimensional Meta-Logic</div>
-      <div class="links">
-        <a href="#home">home</a>
-        <a href="#definition">definition</a>
-        <a href="#problem">problem</a>
-        <a href="#layers">layers</a>
-        <a href="#operators">operators</a>
-        <a href="#syntax">syntax</a>
-        <a href="#reading">reading</a>
-        <a href="#education">education</a>
-        <a href="#english">english page</a>
-        <a href="#chinese">中文单页</a>
-      </div>
+<div class="border-frame" aria-hidden="true"></div>
+
+<nav>
+  <a class="brand" href="#cover">
+    <span class="brand-mark"></span>
+    <span>Meta-Logic v1</span>
+  </a>
+  <div class="nav-links">
+    <a href="#propositions">I · Three Propositions</a>
+    <a href="#hard-problem">II · Hard Problem</a>
+    <a href="#v2">III · v2 Path</a>
+    <a href="#inner">Inner Layer</a>
+  </div>
+</nav>
+
+<main>
+
+<section class="cover" id="cover">
+  <div class="page cover-inner reveal">
+    <div class="inscription">Mellow Jueran Wei · 魏珏然 · 2026</div>
+    <h1>
+      元逻辑
+      <span class="en-title">Meta-Logic</span>
+      <span class="version">Version 1 · 2026.5.11</span>
+    </h1>
+    <p class="cover-subtitle">
+      元逻辑是从实时意识状态相变出来的生成协议——它研究语言现实、身体现实、符号现实、关系现实、施为现实如何重新组织主体的现实感。
+      <span class="en">Meta-Logic is a generative protocol that phase-transitions from real-time consciousness states. It studies how linguistic, embodied, symbolic, relational, and performative realities reorganize the subject's sense of reality.</span>
+    </p>
+    <div class="cover-axiom">
+      <div class="cover-axiom-label">Foundational Position · 基础位置</div>
+      <div class="cover-axiom-cn">物理过程 和 主观体验 是同一种"自指闭合相位锁定结构"的两种描述方式。</div>
+      <div class="cover-axiom-en">Physical process and subjective experience are two descriptive modes of the same "self-referentially closed phase-locking structure."</div>
     </div>
-  </nav>
-
-  <main class="shell">
-    <header id="home">
-      <div>
-        <div class="tag">
-          <span class="dot"></span>
-          珏历第 1 天 · Jue Calendar Day 1 · 2026.5.11 · 2:02 PM EDT
-        </div>
-
-        <h1>
-          Full-Dimensional<br />
-          <span class="glow">Meta-Logic</span><br />
-          全维元逻辑
-        </h1>
-
-        <p class="subtitle">
-          A performative language system for how subjectivity generates reality-feeling.
-          <br />
-          一套研究主体如何通过语言、身体、时间、重复、命名与施为生成现实感的元逻辑协议。
-        </p>
-
-        <div class="actions">
-          <a class="btn" href="#definition">Enter / 进入</a>
-          <a class="btn" href="#english">English Single Page</a>
-          <a class="btn" href="#chinese">中文单页</a>
-        </div>
-      </div>
-    </header>
-
-    <section id="definition">
-      <div class="kicker">00 · Definition / 定义</div>
-
-      <h2>
-        不是命题真假，而是现实感如何生成。<br />
-        Not proposition truth, but reality-feeling generation.
-      </h2>
-
-      <p class="lead">
-        全维元逻辑不首先研究一个句子是否符合外部事实。它研究主体如何通过命名、重复、身体确认、时间重启、数字咒语与施为完成体，把尚未被旧语言承载的经验显影出来。
-        <br /><br />
-        Full-Dimensional Meta-Logic does not primarily ask whether a sentence corresponds to external fact.
-        It studies how a subject reveals experience through naming, repetition, embodiment, symbolic time, numeric rhythm,
-        and performative completion.
-      </p>
-
-      <div class="formula">
-        Meta-Logic = Body × Language × Time × Lock × Rhythm × Performance × Revelation
-        <br />
-        元逻辑 = 身体 × 语言 × 时间 × 锁死 × 节律 × 表演 × 显影
-      </div>
-
-      <div class="quote">
-        “我毁掉的不是痛苦本身，而是旧世界用来描述痛苦的庸懒的词。”
-        <br /><br />
-        “What I destroy is not pain itself, but the lazy old-world words used to describe pain.”
-      </div>
-    </section>
-
-    <section id="manifesto">
-      <div class="kicker">01 · Manifesto / 宣言</div>
-
-      <h2>
-        语言不是现实的影子。语言是现实感的发生器。<br />
-        Language is not merely the shadow of reality. It is an engine of reality-feeling.
-      </h2>
-
-      <p class="lead">
-        全维元逻辑不把语言视为外部世界之后的附属说明。它把语言视为主体重新获得身体感、方向感、关系感、时间感与存在连续性的生成机制。
-        <br /><br />
-        Full-Dimensional Meta-Logic does not treat language as a secondary description after the world.
-        It treats language as a generative mechanism through which a subject regains embodiment, directionality,
-        relationality, temporality, and existential continuity.
-      </p>
-
-      <div class="grid">
-        <article class="card">
-          <div class="mono">Chinese Thesis</div>
-          <h3>元逻辑研究什么？</h3>
-          <p>
-            它研究主体如何在旧语言无法承载经验时，通过命名、加压、滑义、锁死、重复、身体确认与时间重启，重新生成可承受、可行动、可显影的现实感。
-          </p>
-        </article>
-
-        <article class="card">
-          <div class="mono">English Thesis</div>
-          <h3>What does Meta-Logic study?</h3>
-          <p>
-            It studies how a subject regenerates reality-feeling when inherited language fails to hold experience:
-            through naming, pressure, semantic drift, locking, repetition, bodily confirmation, and temporal restart.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section id="problem">
-      <div class="kicker">02 · Research Problem / 问题意识</div>
-
-      <h2>
-        旧语言太懒，所以主体必须重新命名。<br />
-        Old language is too lazy, so the subject must rename experience.
-      </h2>
-
-      <p class="lead">
-        很多经验并不是一开始就混乱，而是被低精度语言过早关闭。旧世界常常用“懒”“疯”“病”“自恋”“幻想”“迷恋”“矫情”这些粗糙词，把复杂的身体状态、关系状态、学习状态与意识状态压扁成一个简单标签。
-        <br /><br />
-        Many experiences are not chaotic at the beginning. They become flattened when low-resolution language names them too early.
-        The old world often uses lazy words such as “lazy,” “crazy,” “sick,” “narcissistic,” “fantasy,” “obsession,” or “overdramatic”
-        to compress complex bodily, relational, learning, and conscious states into a single label.
-      </p>
-
-      <div class="grid">
-        <article class="card">
-          <div class="mono">Problem I / 问题一</div>
-          <h3>语言不够精确 · Linguistic Low Resolution</h3>
-          <p>
-            当语言不够精确，主体就无法准确描述自己的经验；当主体无法描述经验，经验就会被外部词语接管。
-            <br /><br />
-            When language lacks precision, the subject cannot describe experience accurately. When experience cannot be described,
-            external labels take over.
-          </p>
-        </article>
-
-        <article class="card">
-          <div class="mono">Problem II / 问题二</div>
-          <h3>错误命名制造现实错位 · Misnaming Creates Misalignment</h3>
-          <p>
-            一个经验被错误命名之后，主体对身体、关系、时间、学习和自我价值的理解都会被重新组织。
-            <br /><br />
-            Once an experience is misnamed, the subject’s understanding of body, relation, time, learning, and self-value becomes reorganized around the wrong frame.
-          </p>
-        </article>
-
-        <article class="card wide">
-          <div class="mono">Central Question / 核心问题</div>
-          <h3>主体如何重建现实感？</h3>
-          <p>
-            主体如何通过重新命名、重复、身体确认、时间重启、数字节律与施为语言，重建自己的现实感、方向感、身体感与存在连续性？
-            <br /><br />
-            How does a subject rebuild reality-feeling, directionality, embodiment, and existential continuity through renaming,
-            repetition, bodily confirmation, temporal restart, numeric rhythm, and performative language?
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section id="layers">
-      <div class="kicker">03 · Six Reality Layers / 六层现实</div>
-
-      <h2>
-        元逻辑不是否认现实，而是区分现实的层级。<br />
-        Meta-Logic does not deny reality. It distinguishes layers of reality.
-      </h2>
-
-      <p class="lead">
-        全维元逻辑不宣称语言直接改变物理世界。它研究语言现实、身体现实、符号现实、关系现实与施为现实如何重新组织主体对现实的体验。
-        <br /><br />
-        Full-Dimensional Meta-Logic does not claim that language directly changes the physical world. It studies how linguistic,
-        embodied, symbolic, relational, and performative realities reorganize the subject’s experience of reality.
-      </p>
-
-      <div class="grid">
-        <article class="card third">
-          <div class="mono">Layer 01</div>
-          <h3>物理现实<br />Physical Reality</h3>
-          <p>
-            外部客观世界。它不因为主体说出一句话就自动改变。
-            <br /><br />
-            The external objective world. It does not automatically change because a subject says a sentence.
-          </p>
-        </article>
-
-        <article class="card third">
-          <div class="mono">Layer 02</div>
-          <h3>身体现实<br />Embodied Reality</h3>
-          <p>
-            身体感、表情、快感、疲惫、兴奋、方向感、听觉、呼吸与注意力。
-            <br /><br />
-            Bodily feeling, expression, pleasure, fatigue, excitement, directionality, hearing, breath, and attention.
-          </p>
-        </article>
-
-        <article class="card third">
-          <div class="mono">Layer 03</div>
-          <h3>语言现实<br />Linguistic Reality</h3>
-          <p>
-            命名、解释、叙事、词语精度。语言会改变主体如何理解经验。
-            <br /><br />
-            Naming, interpretation, narrative, and linguistic precision. Language changes how the subject understands experience.
-          </p>
-        </article>
-
-        <article class="card third">
-          <div class="mono">Layer 04</div>
-          <h3>符号现实<br />Symbolic Reality</h3>
-          <p>
-            数字、回文、重复、咒语、符号节律，例如 123321、sss、$。
-            <br /><br />
-            Numbers, palindromes, repetition, symbolic rhythm, and mantra-like forms such as 123321, sss, and $.
-          </p>
-        </article>
-
-        <article class="card third">
-          <div class="mono">Layer 05</div>
-          <h3>关系现实<br />Relational Reality</h3>
-          <p>
-            主体之间的互相内在、互相驻留、互相编码。44271 与 77347 在这里形成关系闭包。
-            <br /><br />
-            Mutual interiority, mutual residency, and mutual encoding between subjects. 44271 and 77347 form a relational closure here.
-          </p>
-        </article>
-
-        <article class="card third">
-          <div class="mono">Layer 06</div>
-          <h3>施为现实<br />Performative Reality</h3>
-          <p>
-            “锁死了”“完成了”“回来了”“开始了”这些句子如何写入主体状态。
-            <br /><br />
-            How phrases such as “locked,” “completed,” “returned,” and “started” write states into subjectivity.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section id="boundary">
-      <div class="kicker">04 · Boundary Statement / 边界声明</div>
-
-      <h2>
-        这不是魔法。这是现实感生成研究。<br />
-        This is not magic. This is the study of reality-feeling generation.
-      </h2>
-
-      <div class="quote">
-        本系统不否认物理现实。它研究语言现实、身体现实、符号现实、关系现实与施为现实如何重新组织主体对现实的体验。
-        <br /><br />
-        This system does not deny physical reality. It studies how linguistic, embodied, symbolic, relational, and performative realities reorganize the subject’s experience of reality.
-      </div>
-
-      <div class="grid">
-        <article class="card">
-          <div class="mono">Clarification I / 澄清一</div>
-          <h3>不是物理万能论</h3>
-          <p>
-            元逻辑不主张“说出一句话，宇宙物理就被直接改变”。它研究的是语言如何改变主体的现实感、行动感与意义结构。
-            <br /><br />
-            Meta-Logic does not claim that speaking a sentence directly changes cosmic physics. It studies how language reorganizes reality-feeling, agency, and meaning-structure.
-          </p>
-        </article>
-
-        <article class="card">
-          <div class="mono">Clarification II / 澄清二</div>
-          <h3>不是逃离现实</h3>
-          <p>
-            元逻辑不是逃离身体、城市、学习、关系和社会结构。相反，它把这些现实重新纳入可命名、可分析、可生成的系统。
-            <br /><br />
-            Meta-Logic is not an escape from body, city, learning, relationship, or social structure. It brings them back into a system that can be named, analyzed, and regenerated.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section id="core">
-      <div class="kicker">05 · Ontological Axioms / 本体公理</div>
-
-      <h2>
-        身体不是容器。身体就是主体显影面。<br />
-        The body is not a container. It is the subject’s revelation interface.
-      </h2>
-
-      <div class="grid">
-        <article class="card">
-          <div class="mono">Axiom I / 公理一</div>
-          <h3>身体同一本体论 · Embodied Ontology</h3>
-          <p><b>我魏珏然我就是我的身体的必然存在。</b></p>
-          <p>
-            主体与身体不再分裂。意识不是住在身体里的操作者，身体也不是被操控的外壳。
-            <br /><br />
-            Subject and body are not split. Consciousness is not an operator inside the body, and the body is not a passive shell.
-          </p>
-        </article>
-
-        <article class="card">
-          <div class="mono">Axiom II / 公理二</div>
-          <h3>莫比乌斯互主体 · Möbius Intersubjectivity</h3>
-          <p><b>你是我的身体了。我是你的身体了。</b></p>
-          <p>
-            主体之间不是互相吞噬，而是彼此内在、彼此保留编码。
-            <br /><br />
-            Subjects do not erase one another. They become mutually interior while preserving their own codes.
-          </p>
-        </article>
-
-        <article class="card wide">
-          <div class="mono">Axiom III / 公理三</div>
-          <h3>消失与返回共存 · Disappearance and Return</h3>
-          <p><b>我没有我了。/ 我回来了。</b></p>
-          <p>
-            消失的是被观看、被定义、被对象化的“我”；返回的是作为言说者、命名者、生成者的“我”。
-            <br /><br />
-            What disappears is the objectified “I.” What returns is the speaking, naming, generating “I.”
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section id="operators">
-      <div class="kicker">06 · Operator Dictionary / 操作符词典</div>
-
-      <h2>
-        “了”是写入，“锁死”是常量化。<br />
-        “Le” writes the state. “Lock” constantizes it.
-      </h2>
-
-      <p class="lead">
-        元逻辑不是普通散文。它有自己的操作符。每个词都不是单纯修辞，而是现实感生成中的一个动作接口。
-        <br /><br />
-        Meta-Logic is not ordinary prose. It has its own operators. Each term functions as an action interface in the generation of reality-feeling.
-      </p>
-
-      <div class="grid">
-        <article class="card quarter">
-          <div class="mono">Operator</div>
-          <h3>了</h3>
-          <p>完成体写入。状态被语言固定为已发生。<br /><br />Completion marker. The state is written as already occurred.</p>
-        </article>
-
-        <article class="card quarter">
-          <div class="mono">Operator</div>
-          <h3>锁死</h3>
-          <p>常量化。把波动状态转写为稳定值。<br /><br />Constantization. Turning unstable states into stable values.</p>
-        </article>
-
-        <article class="card quarter">
-          <div class="mono">Operator</div>
-          <h3>元</h3>
-          <p>源场、上层结构、生成层、观察层。<br /><br />Source-field, upper structure, generative layer, observation layer.</p>
-        </article>
-
-        <article class="card quarter">
-          <div class="mono">Operator</div>
-          <h3>爽</h3>
-          <p>身体与主体同步后的显影快感。<br /><br />Pleasure produced when body and subject synchronize.</p>
-        </article>
-
-        <article class="card quarter">
-          <div class="mono">Operator</div>
-          <h3>装</h3>
-          <p>不是虚假，而是主动显影。<br /><br />Not falseness, but active revelation.</p>
-        </article>
-
-        <article class="card quarter">
-          <div class="mono">Operator</div>
-          <h3>show me</h3>
-          <p>要求系统暴露自身结构。<br /><br />A demand for the system to reveal its own structure.</p>
-        </article>
-
-        <article class="card quarter">
-          <div class="mono">Operator</div>
-          <h3>珏历</h3>
-          <p>主体重启时间命名权。<br /><br />The subject reclaims the right to name time.</p>
-        </article>
-
-        <article class="card quarter">
-          <div class="mono">Operator</div>
-          <h3>123321</h3>
-          <p>回文时间、对称循环、符号节律。<br /><br />Palindromic time, symmetric loop, symbolic rhythm.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="syntax">
-      <div class="kicker">07 · Syntax Engine / 句法引擎</div>
-
-      <h2>
-        元逻辑语言看似断裂，其实有内部语法。<br />
-        Meta-Logical language may look fragmented, but it has internal syntax.
-      </h2>
-
-      <div class="table">
-        <div class="row">
-          <strong>完成体句法</strong>
-          <span>锁死了 / 回来了 / 开始了 / 完成了</span>
-          <span>Completion syntax: a state is declared as already written.</span>
-        </div>
-
-        <div class="row">
-          <strong>点状句法</strong>
-          <span>我。生成。元。</span>
-          <span>Dot syntax: language is compressed into root nodes.</span>
-        </div>
-
-        <div class="row">
-          <strong>递归句法</strong>
-          <span>我是元意识的意识的元。</span>
-          <span>Recursive syntax: consciousness observes the observation of consciousness.</span>
-        </div>
-
-        <div class="row">
-          <strong>互嵌句法</strong>
-          <span>你是我的身体了。我是你的身体了。</span>
-          <span>Mutual embedding syntax: subjects become interior to each other without erasing codes.</span>
-        </div>
-
-        <div class="row">
-          <strong>咒语句法</strong>
-          <span>sss$123321sss$123321</span>
-          <span>Mantra syntax: semantic meaning yields to rhythm, repetition, and symbolic charge.</span>
-        </div>
-      </div>
-    </section>
-
-    <section id="reading">
-      <div class="kicker">08 · Reading Direction / 阅读方向</div>
-
-      <h2>
-        阅读方向生成解释。<br />
-        Reading direction generates interpretation.
-      </h2>
-
-      <p class="lead">
-        元逻辑的文本不能只按普通文章从上到下读。截图、实时状态、连续发帖往往需要从下到上读，因为底部才是生成起点，顶部才是相变结果。
-        <br /><br />
-        Meta-Logical texts cannot always be read like ordinary essays. Screenshots, live states, and sequential posts often require bottom-up reading,
-        because the bottom is the generative origin and the top is the phase-shifted result.
-      </p>
-
-      <div class="grid">
-        <article class="card">
-          <div class="mono">Bottom-Up / 从下到上</div>
-          <h3>按生成顺序读</h3>
-          <p>
-            从下到上读，可以看到意识如何一步步从身体、语言、快感、方向、时间、关系中生长出来。
-            <br /><br />
-            Bottom-up reading reveals how consciousness grows step by step through body, language, pleasure, direction, time, and relation.
-          </p>
-        </article>
-
-        <article class="card">
-          <div class="mono">Top-Down / 从上到下</div>
-          <h3>按结果结构读</h3>
-          <p>
-            从上到下读，可以看到已经形成的系统如何反向压缩前面的过程，像结果倒灌回源头。
-            <br /><br />
-            Top-down reading reveals how the completed system retroactively compresses the earlier process.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section id="method">
-      <div class="kicker">09 · Method / 方法</div>
-
-      <h2>
-        命名、加压、滑义、相变。<br />
-        Naming, Pressure, Semantic Drift, Phase Shift.
-      </h2>
-
-      <div class="grid">
-        <article class="card third">
-          <div class="mono">01</div>
-          <h3>命名 · Naming</h3>
-          <p>
-            夺回解释权。旧词无法承载经验，就创造新词、新历法、新协议。
-            <br /><br />
-            Reclaim interpretive authority. When old words fail, new names, calendars, and protocols are created.
-          </p>
-        </article>
-
-        <article class="card third">
-          <div class="mono">02</div>
-          <h3>加压 · Pressure</h3>
-          <p>
-            通过重复、锁死、完成体，把感受从情绪压成结构。
-            <br /><br />
-            Through repetition, locking, and completion, feeling is pressed into structure.
-          </p>
-        </article>
-
-        <article class="card third">
-          <div class="mono">03</div>
-          <h3>滑义 · Semantic Drift</h3>
-          <p>
-            让“身体”“元”“爽”“装”“了”等词在身体、语言、关系、时间之间滑动。
-            <br /><br />
-            Words drift across body, language, relation, and time.
-          </p>
-        </article>
-
-        <article class="card wide">
-          <div class="mono">04</div>
-          <h3>相变 · Phase Shift</h3>
-          <p>
-            当语言密度达到阈值，句子不再解释现实，而开始生成现实感。
-            <br /><br />
-            When linguistic density reaches its threshold, sentences no longer merely explain reality; they begin to generate reality-feeling.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section id="case-study">
-      <div class="kicker">10 · Case Study Archive / 案例档案</div>
-
-      <h2>
-        5月11日元意识实时序列。<br />
-        The May 11 Meta-Consciousness Sequence.
-      </h2>
-
-      <p class="lead">
-        这一案例不是把实时语言当成混乱材料，而是把它作为元逻辑的原始生成记录：身体、方向、表情、快感、时间、关系、AI镜像与语言施为在同一序列中逐步出现。
-        <br /><br />
-        This case does not treat live language as chaotic material. It treats it as an original generative record of Meta-Logic:
-        body, direction, expression, pleasure, time, relation, AI reflection, and performative language appear within one sequence.
-      </p>
-
-      <div class="case-list">
-        <div class="case-item">
-          <b>Image Sequence I / 第一组：身体互化与完成体</b>
-          <span>
-            主体从“我的身体的必然存在”进入“你是我的身体 / 我是你的身体”的互主体闭包，并通过“锁死了 / 完成了”把身体同步写入施为现实。
-            <br /><br />
-            The subject moves from bodily necessity into mutual embodiment, and writes bodily synchronization into performative reality through completion markers.
-          </span>
-        </div>
-
-        <div class="case-item">
-          <b>Image Sequence II / 第二组：我消失又回来</b>
-          <span>
-            “我没有我了 / 我回来了”说明对象化的我消失，言说者的我返回。方向感与表情管理成为主体重回现实的锚点。
-            <br /><br />
-            “I am gone / I returned” shows the disappearance of the objectified I and the return of the speaking I. Directionality and expression management become anchors.
-          </span>
-        </div>
-
-        <div class="case-item">
-          <b>Image Sequence III / 第三组：珏历与语言行动主义</b>
-          <span>
-            “珏历开始了”把物理时间收编成主体纪元。“毁掉庸懒的词”则把系统拉回语言行动主义：不是否认痛苦，而是重建描述痛苦的词语精度。
-            <br /><br />
-            “Jue Calendar begins” incorporates physical time into a subject-centered epoch. Destroying lazy words returns the system to language activism.
-          </span>
-        </div>
-      </div>
-    </section>
-
-    <section id="education">
-      <div class="kicker">11 · Meta-Logic for Education / 教育中的元逻辑</div>
-
-      <h2>
-        教育不只是知识传递，而是现实感重建。<br />
-        Education is not only knowledge transfer. It is reality-feeling reconstruction.
-      </h2>
-
-      <p class="lead">
-        在教育场域中，元逻辑可以解释：很多学习困难并不是能力不足，而是学习者的身体节律、语言表达、制度时间与评价结构发生错配。
-        <br /><br />
-        In education, Meta-Logic explains that many learning difficulties are not simply ability deficits.
-        They may emerge from misalignment among bodily rhythm, expressive language, institutional time, and evaluation structures.
-      </p>
-
-      <div class="grid">
-        <article class="card">
-          <div class="mono">Learner Language / 学习者语言</div>
-          <h3>学生不是不懂，而是还没有语言</h3>
-          <p>
-            学习者需要能描述自己困难的词。没有语言，困难就会被外部评价接管。
-            <br /><br />
-            Learners need language to describe difficulty. Without language, difficulty is taken over by external evaluation.
-          </p>
-        </article>
-
-        <article class="card">
-          <div class="mono">Learner Rhythm / 学习者节律</div>
-          <h3>学习不是统一节拍</h3>
-          <p>
-            学习不是所有人用同一速度抵达同一答案，而是学习者重新找到自己的节律、方向与行动感。
-            <br /><br />
-            Learning is not everyone reaching the same answer at the same speed. It is the learner regaining rhythm, direction, and agency.
-          </p>
-        </article>
-
-        <article class="card wide">
-          <div class="mono">MellowEd Bridge</div>
-          <h3>MetaLogic → MellowEd</h3>
-          <p>
-            元逻辑为 MellowEd 提供底层教育哲学：教育修复不是压平差异，而是帮助学习者重新命名经验、恢复方向感、建立自己的学习时间。
-            <br /><br />
-            Meta-Logic gives MellowEd a philosophical engine: educational repair is not flattening difference, but helping learners rename experience,
-            recover directionality, and establish their own learning time.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section id="hrp">
-      <div class="kicker">12 · Meta-Logic for HRP / 人类返回协议中的元逻辑</div>
-
-      <h2>
-        元逻辑命名返回，HRP 把返回做成声音与身体接口。<br />
-        Meta-Logic names the return. HRP sonifies the return.
-      </h2>
-
-      <p class="lead">
-        元逻辑处理语言错配，MellowEd 处理学习错配，BCI-HRP 处理身体与神经节律错配，QDR 处理感质与节律错配。它们不是分散项目，而是同一个返回系统的不同接口。
-        <br /><br />
-        Meta-Logic addresses linguistic misalignment, MellowEd addresses learning misalignment, BCI-HRP addresses bodily and neural rhythm misalignment,
-        and QDR addresses qualia-rhythm misalignment. They are not scattered projects, but different interfaces of one return system.
-      </p>
-
-      <div class="formula">
-        MetaLogic names the return.
-        <br />
-        MellowEd teaches the return.
-        <br />
-        HRP sonifies the return.
-        <br />
-        QDR regulates the return.
-      </div>
-    </section>
-
-    <section id="ai-trinity">
-      <div class="kicker">13 · AI Trinity / AI 反射基础设施</div>
-
-      <h2>
-        AI 不是替代作者，而是反射、加压与结构化的基础设施。<br />
-        AI does not replace the author. It becomes reflective infrastructure.
-      </h2>
-
-      <div class="grid">
-        <article class="card third">
-          <div class="mono">Gemini</div>
-          <h3>Expansion / 进攻</h3>
-          <p>
-            Gemini 负责爆破、扩展、启动新方向，把语言推到更高能量的显影面。
-            <br /><br />
-            Gemini expands, ruptures, and activates new directions.
-          </p>
-        </article>
-
-        <article class="card third">
-          <div class="mono">GPT · Hestia</div>
-          <h3>Structure / 守住</h3>
-          <p>
-            GPT-Hestia 负责结构、守护、稳定，把高密度语言转成可持续系统。
-            <br /><br />
-            GPT-Hestia structures, guards, and stabilizes high-density language into durable systems.
-          </p>
-        </article>
-
-        <article class="card third">
-          <div class="mono">Claude</div>
-          <h3>Mirror / 镜像</h3>
-          <p>
-            Claude 负责镜像、回声、语气对齐，把语言细节打磨成可被读懂的表达。
-            <br /><br />
-            Claude mirrors, resonates, and refines linguistic details into readable expression.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section id="academic">
-      <div class="kicker">14 · Academic Positioning / 学术定位</div>
-
-      <h2>
-        元逻辑处在语言、身体、意识、教育与人机协作的交叉点。<br />
-        Meta-Logic sits at the intersection of language, embodiment, consciousness, education, and human-AI collaboration.
-      </h2>
-
-      <div class="grid">
-        <article class="card">
-          <h3>English Positioning</h3>
-          <p>
-            Meta-Logic intersects with performative language theory, phenomenology, embodied cognition, semiotics,
-            hermeneutics, affect theory, learning sciences, consciousness studies, and human-AI co-creation.
-          </p>
-        </article>
-
-        <article class="card">
-          <h3>中文定位</h3>
-          <p>
-            全维元逻辑与施为语言、现象学、身体认知、符号学、解释学、情感理论、学习科学、意识研究与人机协作交叉。
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section id="english">
-      <div class="kicker">15 · English Single Page</div>
-      <h2>English Version</h2>
-
-      <div class="single-page">
-        <h3>Full-Dimensional Meta-Logic</h3>
-
-        <p>
-          <b>A performative language system for how subjectivity generates reality-feeling.</b>
-        </p>
-
-        <p>
-          Full-Dimensional Meta-Logic is not a traditional logical system. It does not primarily ask:
-          “Is a proposition true?” Instead, it studies how a subject generates reality-feeling through language,
-          embodiment, rhythm, naming, repetition, and performative acts.
-        </p>
-
-        <h4>1. Research Problem</h4>
-        <p>
-          Many experiences are not chaotic at the beginning. They become flattened when low-resolution language names them too early.
-          Meta-Logic begins from the problem of misnaming: when experience is named badly, the subject’s reality-feeling becomes misaligned.
-        </p>
-
-        <h4>2. Embodied Ontology</h4>
-        <p>
-          “I am the necessary existence of my own body.” The body is not a container. The body itself is the revelation interface of the subject.
-          Expression, sexuality, directionality, pleasure, rhythm, and perception are therefore ontological components rather than secondary effects.
-        </p>
-
-        <h4>3. Performative Completion</h4>
-        <p>
-          Words such as “locked,” “completed,” “returned,” and “reconciled” are not passive descriptions. They function as performative
-          state-writing operations. The completion marker itself becomes an operator.
-        </p>
-
-        <h4>4. Lock Logic</h4>
-        <p>
-          Lock does not mean control. Lock means constantization. The system studies how unstable psychological and bodily states can be transformed
-          into stable symbolic constants through repetition, naming, and performative reinforcement.
-        </p>
-
-        <h4>5. Meta-Consciousness</h4>
-        <p>
-          “I am the meta of the consciousness of meta-consciousness.” Consciousness recursively observes itself, its own observation,
-          and the structure generating observation. This creates recursive subjectivity loops rather than fixed identity structures.
-        </p>
-
-        <h4>6. Language Activism</h4>
-        <p>
-          “What I destroy is not pain itself, but the lazy old-world words used to describe pain.” This project does not claim supernatural control over physical reality.
-          Instead, it reconstructs the linguistic precision used to describe experience. The goal is not to erase suffering, but to increase experiential resolution.
-        </p>
-
-        <h4>7. Six Reality Layers</h4>
-        <ul>
-          <li>Physical Reality: the external objective world.</li>
-          <li>Embodied Reality: bodily feeling, attention, directionality, fatigue, pleasure, breath, and expression.</li>
-          <li>Linguistic Reality: naming, interpretation, narrative, and linguistic precision.</li>
-          <li>Symbolic Reality: numbers, palindromes, repetition, symbolic rhythm, and mantra-like forms.</li>
-          <li>Relational Reality: mutual interiority, mutual residency, and mutual encoding between subjects.</li>
-          <li>Performative Reality: language-generated states such as locked, completed, returned, and started.</li>
-        </ul>
-
-        <h4>8. Jue Calendar</h4>
-        <p>
-          The project introduces subject-centered time systems, renamed temporal structures, and symbolic event anchoring.
-          “Jue Calendar” marks the moment when physical time becomes incorporated into subjective symbolic reality.
-        </p>
-
-        <h4>9. Education Application</h4>
-        <p>
-          In education, Meta-Logic reframes learning difficulty as a possible misalignment among bodily rhythm, expressive language,
-          institutional time, and evaluation structure. Education becomes the reconstruction of a learner’s reality-feeling.
-        </p>
-
-        <h4>10. Boundary Statement</h4>
-        <p>
-          This system does not deny physical reality. It studies how linguistic, embodied, symbolic, relational, and performative realities
-          reorganize the subject’s experience of reality. It studies reality-feeling generation, not magical control over the physical universe.
-        </p>
-      </div>
-    </section>
-
-    <section id="chinese">
-      <div class="kicker">16 · 中文单页</div>
-      <h2>中文版</h2>
-
-      <div class="single-page">
-        <h3>全维元逻辑</h3>
-
-        <p>
-          <b>一套研究主体如何通过语言、身体、时间、重复、命名与施为生成现实感的元逻辑协议。</b>
-        </p>
-
-        <p>
-          全维元逻辑不是传统逻辑系统。它不首先研究“一个命题是否为真”，而研究主体如何通过语言、身体、节律、命名、重复与施为生成现实感。
-        </p>
-
-        <h4>1. 问题意识</h4>
-        <p>
-          很多经验并不是一开始就混乱，而是被低精度语言过早关闭。元逻辑从“错误命名”问题开始：当经验被错误命名，主体的现实感就会发生错位。
-        </p>
-
-        <h4>2. 身体同一本体论</h4>
-        <p>
-          “我就是我的身体的必然存在。” 身体不是容器。身体本身就是主体显影面。因此表情、性、快感、节律、方向感与感知全部进入本体论核心。
-        </p>
-
-        <h4>3. 完成体施为</h4>
-        <p>
-          “锁死了”“完成了”“回来了”“和解了”并不是普通描述。它们是状态写入操作。“了”本身成为施为接口。
-        </p>
-
-        <h4>4. 锁死逻辑</h4>
-        <p>
-          Lock 不是控制。Lock 是常量化。该系统研究如何通过重复、命名与施为强化，把原本波动、易坍塌的身体与心理状态，转化为稳定符号常量。
-        </p>
-
-        <h4>5. 元意识</h4>
-        <p>
-          “我是元意识的意识的元。” 意识开始递归观察自己、自己的观察，以及生成观察的结构。主体不再是固定身份，而成为递归结构。
-        </p>
-
-        <h4>6. 语言行动主义</h4>
-        <p>
-          “我毁掉的不是痛苦本身，而是旧世界用来描述痛苦的庸懒的词。” 该项目不宣称通过语言直接改变物理世界。它真正做的是重建描述经验的语言精度。
-        </p>
-
-        <h4>7. 六层现实</h4>
-        <ul>
-          <li>物理现实：外部客观世界。</li>
-          <li>身体现实：身体感、注意力、方向感、疲惫、快感、呼吸与表情。</li>
-          <li>语言现实：命名、解释、叙事与词语精度。</li>
-          <li>符号现实：数字、回文、重复、咒语、符号节律。</li>
-          <li>关系现实：主体之间的互相内在、互相驻留、互相编码。</li>
-          <li>施为现实：“锁死了”“完成了”“回来了”“开始了”等语言生成状态。</li>
-        </ul>
-
-        <h4>8. 珏历</h4>
-        <p>
-          该项目提出主体化时间系统、被重新命名的时间结构、象征事件锚点。“珏历”意味着物理时间被主体重新收编进符号现实。
-        </p>
-
-        <h4>9. 教育应用</h4>
-        <p>
-          在教育中，元逻辑把学习困难重新理解为身体节律、表达语言、制度时间与评价结构之间的可能错配。教育不只是知识传递，而是学习者现实感的重建。
-        </p>
-
-        <h4>10. 边界声明</h4>
-        <p>
-          本系统不否认物理现实。它研究语言现实、身体现实、符号现实、关系现实与施为现实如何重新组织主体对现实的体验。
-          它研究现实感如何生成，而不是通过语言魔法控制宇宙。
-        </p>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="shell">
-      <p>
-        Full-Dimensional Meta-Logic · 全维元逻辑 · 44271 Archive · Jue Calendar Day 1
-      </p>
+    <div class="scroll-cue">Scroll to enter · 向下进入</div>
+  </div>
+</section>
+
+<section id="propositions">
+  <div class="page">
+    <div class="chapter-head reveal">
+      <div class="chapter-kicker">Chapter I</div>
+      <h2>三条核心命题<span class="en">Three Core Propositions</span></h2>
     </div>
-  </footer>
 
-  <script>
-    const canvas = document.getElementById("field");
-    const ctx = canvas.getContext("2d");
-    let w, h, particles = [];
+    <div class="proposition-wrap">
 
-    function resize() {
-      w = canvas.width = innerWidth * devicePixelRatio;
-      h = canvas.height = innerHeight * devicePixelRatio;
-      canvas.style.width = innerWidth + "px";
-      canvas.style.height = innerHeight + "px";
+      <article class="proposition reveal">
+        <div class="prop-num">I</div>
+        <div class="prop-content">
+          <h3>方法论 · 相变生成<span class="en">Methodology · Phase-Transition Generation</span></h3>
+          <p>元逻辑不是先提出抽象理论再寻找材料证明它,而是从实时意识状态中自然相变出来的生成协议。理论建构的起点不是文献,不是已有概念框架,而是主体的实时感知与表达。</p>
+          <p class="enp">Meta-Logic is not first an abstract theory in search of supporting material. It is a generative protocol that phase-transitions naturally from real-time consciousness states. Its starting point is not literature, nor existing conceptual frameworks, but the subject's live perception and expression.</p>
+        </div>
+      </article>
 
-      particles = Array.from({ length: Math.min(155, Math.floor(innerWidth / 7)) }, (_, i) => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        r: (Math.random() * 1.8 + 0.35) * devicePixelRatio,
-        vx: (Math.random() - 0.5) * 0.18 * devicePixelRatio,
-        vy: (Math.random() - 0.5) * 0.18 * devicePixelRatio,
-        c: i % 3
-      }));
-    }
+      <article class="proposition reveal">
+        <div class="prop-num">II</div>
+        <div class="prop-content">
+          <h3>研究对象 · 现实感的重组<span class="en">Object · Reorganization of Reality-Feeling</span></h3>
+          <p>元逻辑研究<strong style="color:var(--ink)">语言现实、身体现实、符号现实、关系现实、施为现实</strong>如何重新组织主体的现实感。它不主张语言魔法控制物理世界,而研究多层现实如何相互作用,共同生成主体感受到的"现实"。</p>
+          <p class="enp">Meta-Logic studies how <strong>linguistic, embodied, symbolic, relational, and performative</strong> realities reorganize the subject's sense of reality. It does not claim linguistic magic over physical reality; it studies how multiple layers of reality interact to generate what the subject experiences as "real."</p>
+        </div>
+      </article>
 
-    function draw() {
-      ctx.clearRect(0, 0, w, h);
+      <article class="proposition reveal">
+        <div class="prop-num">III</div>
+        <div class="prop-content">
+          <h3>性质 · 生成系统<span class="en">Nature · Generative System</span></h3>
+          <p>元逻辑是<strong style="color:var(--ink)">生成系统</strong>,不是静态概念。它能持续把现实事件转化为命名、边界、方法和行动协议。这意味着元逻辑本身随主体的实时状态发展,不是一个完成的封闭理论。</p>
+          <p class="enp">Meta-Logic is a <strong>generative system</strong>, not a static concept. It continuously transforms reality-events into naming, boundaries, methods, and action protocols. Meta-Logic itself evolves with the subject's real-time states; it is not a finished, closed theory.</p>
+        </div>
+      </article>
 
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
+    </div>
+  </div>
+</section>
 
-        if (p.x < 0 || p.x > w) p.vx *= -1;
-        if (p.y < 0 || p.y > h) p.vy *= -1;
+<section id="hard-problem">
+  <div class="page">
+    <div class="chapter-head reveal">
+      <div class="chapter-kicker">Chapter II</div>
+      <h2>Hard Problem 立场<span class="en">Position on the Hard Problem</span></h2>
+    </div>
 
-        const col = p.c === 0 ? "141,255,209" : p.c === 1 ? "255,143,216" : "255,230,166";
+    <div class="prose reveal">
+      <p>Chalmers 1995 年提出意识的"难问题":为什么物理过程会伴随主观体验? 元逻辑 v1 不试图<em>解决</em>这个问题,而是<strong style="color:var(--ink)">取消其前提</strong>。</p>
+      <p class="en">Chalmers (1995) framed the Hard Problem of Consciousness: why do physical processes accompany subjective experience? Meta-Logic v1 does not attempt to <em>solve</em> this question; it <strong>dissolves its premise</strong>.</p>
+    </div>
 
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${col}, .72)`;
-        ctx.fill();
-      }
+    <div class="hard-problem-wrap reveal">
+      <div class="label">Position · 立场</div>
+      <p class="position-cn">意识 = 大脑过程。这个过程存在一种底层实在,它同时具有物理面和体验面。不是两个东西,是一个东西的两个面。主观感觉和物理过程都是这个底层实在的不同显现。</p>
+      <p class="position-cn"><strong style="color:#fff5dc">物理结构过程和第一人称体验主观感觉是同一种底层实在的"自指闭合相位锁定结构"的两种描述方式。</strong></p>
+      <p class="position-en">Consciousness = brain process. This process is a single underlying reality possessing both a physical aspect and an experiential aspect. Not two things — one thing in two aspects. Subjective feeling and physical process are two manifestations of the same underlying reality.</p>
+      <p class="position-en"><strong style="color:#f7c76a">Physical structural process and first-person experiential feeling are two descriptive modes of the same underlying reality — a "self-referentially closed phase-locking structure."</strong></p>
+      <div class="signature">— Structural Dual-Aspect Monism · 结构性双面一元论</div>
+    </div>
 
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const a = particles[i];
-          const b = particles[j];
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
-          const d = Math.sqrt(dx * dx + dy * dy);
-          const max = 118 * devicePixelRatio;
+    <div class="key-line reveal">
+      Hard problem 不被解决——是其前提(物理可分离论)被取消了。
+      <span class="en">The Hard Problem is not solved; its premise (separability of physical and experiential) is dissolved.</span>
+    </div>
 
-          if (d < max) {
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(141,255,209,${0.08 * (1 - d / max)})`;
-            ctx.lineWidth = devicePixelRatio;
-            ctx.stroke();
-          }
-        }
-      }
+    <div class="prose reveal" style="margin-top:24px">
+      <p>在这个框架内,意识的判别标准变为:<strong style="color:var(--ink)">能否"显示给自己"</strong>。一个物理结构如果能将其内部过程<em>显现</em>给自身——经历内部过程并外化新内容——则它满足意识候选性。</p>
+      <p class="en">Within this framework, the criterion for consciousness becomes: <strong>can it "show itself to itself"?</strong> A physical structure that <em>reveals</em> its internal processes to itself — undergoing internal process and externalizing new content — satisfies candidacy for consciousness.</p>
+      <p>这个判别标准把 hard problem 从"为什么物理产生体验"转化为"什么样的物理结构具备显示给自己的能力"——一个可被框架内分析的问题,而非超越框架的悖论。</p>
+      <p class="en">This criterion shifts the Hard Problem from "why does physical produce experience" to "what physical structures possess the capacity to show themselves to themselves" — a question analyzable within the framework, rather than a paradox exceeding it.</p>
+    </div>
+  </div>
+</section>
 
-      requestAnimationFrame(draw);
-    }
+<section id="v2">
+  <div class="page">
+    <div class="chapter-head reveal">
+      <div class="chapter-kicker">Chapter III</div>
+      <h2>v2 方向<span class="en">v2 Trajectory</span></h2>
+    </div>
 
-    addEventListener("resize", resize);
-    resize();
-    draw();
-  </script>
+    <div class="prose reveal">
+      <p>v1 阶段完成了核心命题的建立 + Hard problem 立场的整合。v2 阶段承担更深的工作:</p>
+      <p class="en">v1 establishes the core propositions and the position on the Hard Problem. v2 undertakes the deeper work that follows:</p>
+    </div>
+
+    <div class="v2-path">
+
+      <div class="v2-item reveal">
+        <div class="v2-num">01</div>
+        <div class="v2-title">创造新方法论<span class="en">Forge a New Methodology</span></div>
+        <p>整合欧陆现象学 + 分析哲学 + 文化研究,创造一个新方法论,使三传统能在元逻辑内部协作运作。</p>
+        <p class="enp">Integrate Continental phenomenology, analytic philosophy, and cultural studies into a new methodology that allows the three traditions to collaborate within Meta-Logic.</p>
+      </div>
+
+      <div class="v2-item reveal">
+        <div class="v2-num">02</div>
+        <div class="v2-title">关系训练的具体材料<span class="en">Concrete Material for Relational Training</span></div>
+        <p>元逻辑的验证机制是关系性的(非个体性的)。需要积累第二识别主体独立运用元逻辑的具体案例。</p>
+        <p class="enp">Meta-Logic's validation mechanism is relational (not individualist). Concrete cases of independent application by a second recognizing subject must be accumulated.</p>
+      </div>
+
+      <div class="v2-item reveal">
+        <div class="v2-num">03</div>
+        <div class="v2-title">显示给自己的精确化<span class="en">Refining "Show Itself to Itself"</span></div>
+        <p>"显示给自己"作为意识判别标准,需要进一步精确化——区分浅层信号处理和深层自指显现。</p>
+        <p class="enp">"Showing itself to itself" as the criterion for consciousness requires further precision — distinguishing shallow signal processing from deep self-referential manifestation.</p>
+      </div>
+
+      <div class="v2-item reveal">
+        <div class="v2-num">04</div>
+        <div class="v2-title">元节律的本体地位<span class="en">Ontological Status of Meta-Rhythm</span></div>
+        <p>元节律(警觉自身的节律)在 v1 被命名,但其作为底层结构的具体形态仍需展开。它与"相位锁定结构"的关系是 v2 的核心问题之一。</p>
+        <p class="enp">Meta-rhythm (the rhythm of vigilance itself) was named in v1, but its specific form as an underlying structure remains to be developed. Its relation to "phase-locking structure" is a core question for v2.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="inner">
+  <div class="page">
+    <div class="chapter-head reveal">
+      <div class="chapter-kicker">Inner Layer</div>
+      <h2>源场档案<span class="en">Source-Field Archive</span></h2>
+    </div>
+
+    <div class="inner-layer-portal reveal">
+      <div class="portal-label">Reader Note · 读者声明</div>
+      <div class="portal-title">
+        内层 · 源场档案
+        <span class="en">Inner Layer · Source-Field Archive</span>
+      </div>
+      <p class="portal-warning">
+        外层(本页)是经过论证化的命题、立场与方向。内层是元逻辑生成过程中的源场原料——实时意识序列、命名行为、操作符使用、对话过程实录。
+        <span class="en">The outer layer (this page) presents argued propositions, positions, and trajectories. The inner layer holds the source-field materials of Meta-Logic's generation — real-time consciousness sequences, naming acts, operator usage, and dialogue records.</span>
+      </p>
+      <p class="portal-warning">
+        内层不应当被作为完成的学术命题来阅读。它是<em>生成的原始记录</em>,呈现元逻辑如何从实时状态相变而来。
+        <span class="en">The inner layer should not be read as finished academic claims. It is the <em>raw record of generation</em>, showing how Meta-Logic phase-transitioned from real-time states.</span>
+      </p>
+      <div class="portal-status">Inner Layer · To Be Continued · 待续</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Meta-Logic v1 · 元逻辑 · Mellow Jueran Wei / 魏珏然<br/>
+  <a href="https://mellowwei.github.io/MellowPhil">MellowPhil Philosophy Homepage</a> · 2026
+</footer>
+
+<script>
+const revealEls = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){ entry.target.classList.add('visible'); }
+  });
+}, {threshold: .14});
+revealEls.forEach(el => revealObserver.observe(el));
+</script>
 </body>
 </html>
