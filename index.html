@@ -176,6 +176,32 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .keyline-cn{font-family:'Spectral',serif;font-size:15px;color:var(--hd);font-weight:500;line-height:1.5}
 .keyline-en{font-family:'Spectral',serif;font-style:italic;font-size:12.5px;color:var(--a1);margin-top:6px;line-height:1.5}
 
+
+
+/* ACADEMIC PORTAL BRIDGE */
+.portal-note{margin-top:16px;max-width:760px;padding:12px 14px;border:1px solid rgba(156,182,212,.22);background:linear-gradient(135deg,rgba(156,182,212,.055),rgba(122,138,165,.025));border-left:3px solid var(--a1);border-radius:3px;font-size:12.5px;color:var(--tx);line-height:1.7}
+.portal-note a{color:var(--a1);text-decoration:none;border-bottom:1px solid rgba(156,182,212,.35)}
+.portal-note a:hover{color:var(--hd);border-bottom-color:var(--hd)}
+.bridge-card{background:linear-gradient(135deg,rgba(156,182,212,.055),rgba(122,138,165,.022) 55%,rgba(5,5,7,.75));border:1px solid var(--border-hi);border-radius:4px;padding:24px 26px;margin:18px 0;position:relative;overflow:hidden}
+.bridge-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 15% 0%,rgba(156,182,212,.12),transparent 32%),radial-gradient(circle at 90% 35%,rgba(122,138,165,.10),transparent 36%);pointer-events:none}
+.bridge-card>*{position:relative;z-index:1}
+.bridge-kicker{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--a1);text-transform:uppercase;margin-bottom:9px}
+.bridge-title{font-family:'Spectral',serif;font-size:22px;color:var(--hd);font-weight:500;line-height:1.25;margin-bottom:10px}
+.bridge-title .en{display:block;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--a2);font-style:normal;margin-top:4px;text-transform:uppercase}
+.bridge-copy{font-size:13.5px;color:var(--tx);line-height:1.85;max-width:760px;margin-top:10px}
+.bridge-copy strong{color:var(--a1);font-weight:500}
+.bridge-copy.zh{color:var(--tx);border-left:2px solid rgba(156,182,212,.28);padding-left:14px;margin-top:12px}
+.bridge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 14px}
+.bridge-node{background:rgba(10,10,14,.72);border:1px solid var(--border);border-radius:3px;padding:14px 15px}
+.bridge-node .bn-k{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--a2);text-transform:uppercase;margin-bottom:6px}
+.bridge-node .bn-t{font-size:13px;color:var(--hd);font-weight:500;line-height:1.35}
+.bridge-node .bn-d{font-size:11.5px;color:var(--tx2);line-height:1.65;margin-top:7px}
+.bridge-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.bridge-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--a1);text-decoration:none;border:1px solid rgba(156,182,212,.28);padding:7px 10px;border-radius:3px;background:rgba(156,182,212,.035);transition:background .15s,color .15s,border-color .15s}
+.bridge-btn:hover{color:var(--hd);border-color:rgba(232,236,242,.45);background:rgba(156,182,212,.075)}
+.bridge-formula{margin-top:16px;padding:14px 16px;border-left:3px solid var(--a1);background:rgba(156,182,212,.04);border-radius:0 3px 3px 0;font-family:'Spectral',serif;color:var(--hd);font-size:15px;line-height:1.55}
+.bridge-formula small{display:block;font-style:italic;color:var(--a1);font-size:12.5px;margin-top:6px}
+
 /* SIDEBAR */
 .sidebar{display:flex;flex-direction:column;gap:26px;position:sticky;top:52px}
 .sbl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--tx3);padding-bottom:9px;border-bottom:1px solid var(--border);margin-bottom:11px}
@@ -258,12 +284,17 @@ footer a:hover{color:var(--a1)}
   <div class="versionbox">
     <span class="vk">Version</span><span class="vv">v1 · 2026.5.11 · 25 Workflow Cycles · Meta-Consciousness ⇄ Meta-Logic</span>
   </div>
+  <div class="portal-note">
+    This page is the methodological core of the <a href="https://mellowwei.github.io/MellowAcademic/" target="_blank" rel="noopener">MellowAcademic</a> research portal. MellowAcademic is the public academic map; Meta-Logic is the generative engine underneath it.<br>
+    本页是 <a href="https://mellowwei.github.io/MellowAcademic/" target="_blank" rel="noopener">MellowAcademic</a> 学术总站的方法论核心。MellowAcademic 是对外学术地图；Meta-Logic 是其底层生成引擎。
+  </div>
 </div>
 
 <!-- NAV -->
 <nav class="pnav">
   <div class="pni">
     <a href="#cover" class="on">Cover</a>
+    <a href="#portal-relation">Portal Relation</a>
     <a href="#frame">0 · Frame</a>
     <a href="#propositions">I · Three Propositions</a>
     <a href="#subjecthood">II · Subjecthood</a>
@@ -281,6 +312,72 @@ footer a:hover{color:var(--a1)}
 <main>
 
 <div class="feedhd">Meta-Logic-Generative · 元逻辑生成学 · <span>Meta-Consciousness Emerges from Meta-Logical Generation · 元意识从元逻辑生成中浮现</span></div>
+
+
+<!-- ============================================ -->
+<!-- PORTAL RELATION · MELLOWACADEMIC ⇄ METALOGIC -->
+<!-- ============================================ -->
+<article class="entry" id="portal-relation">
+  <div class="etop">
+    <span class="badge bp">Portal Relation</span>
+    <span class="edate">MellowAcademic ⇄ Meta-Logic</span>
+  </div>
+  <div class="etitle">How Meta-Logic Hangs Inside MellowAcademic<span class="sub">元逻辑生成学如何挂入学术总站 · portal and engine</span></div>
+
+  <div class="bridge-card">
+    <div class="bridge-kicker">Academic Architecture · 学术架构定位</div>
+    <div class="bridge-title">MellowAcademic is the portal. Meta-Logic is the engine.<span class="en">Public Map ⇄ Methodological Core</span></div>
+
+    <p class="bridge-copy">
+      <strong>Meta-Logic is not one more project card.</strong> It is the generative method that explains why the whole MellowAcademic ecology can exist as one system. MellowAcademic receives the external academic gaze; Meta-Logic provides the inner grammar that turns consciousness, language, relation, rhythm, and embodied reality into researchable structures.
+    </p>
+    <p class="bridge-copy zh">
+      <strong>元逻辑生成学不是又一个普通项目卡片。</strong>它是解释整个 MellowAcademic 研究生态为什么能够作为一个系统成立的生成方法。MellowAcademic 承接外部学术目光；Meta-Logic 提供内部语法，把意识、语言、关系、节律与身体现实转化为可研究的结构。
+    </p>
+
+    <div class="bridge-grid">
+      <div class="bridge-node">
+        <div class="bn-k">MellowAcademic</div>
+        <div class="bn-t">Academic Portal / Research Ecology Map</div>
+        <div class="bn-d">The outward-facing entrance for professors, labs, collaborators, and readers. It organizes the research constellation.</div>
+      </div>
+      <div class="bridge-node">
+        <div class="bn-k">Meta-Logic</div>
+        <div class="bn-t">Methodological Core / Generative Engine</div>
+        <div class="bn-d">The inner discipline that names how language produces logic, logic produces reality-feeling, and reality feeds back into language.</div>
+      </div>
+      <div class="bridge-node">
+        <div class="bn-k">Relation</div>
+        <div class="bn-t">Two-Way Binding / 双向挂载</div>
+        <div class="bn-d">MellowAcademic gives Meta-Logic public legibility. Meta-Logic gives MellowAcademic internal necessity.</div>
+      </div>
+    </div>
+
+    <div class="bridge-formula">
+      MellowAcademic = public academic map / 对外学术地图<br>
+      Meta-Logic = generative method / 底层生成方法<br>
+      Together = research ecology with an engine / 带发动机的研究生态
+      <small>Meta-Logic makes the academic portal feel less like a portfolio and more like a discipline-bearing architecture.</small>
+    </div>
+
+    <div class="bridge-actions">
+      <a class="bridge-btn" href="https://mellowwei.github.io/MellowAcademic/" target="_blank" rel="noopener">Enter MellowAcademic →</a>
+      <a class="bridge-btn" href="#connections">See Cross-System Connections ↓</a>
+      <a class="bridge-btn" href="#frame">Read Founding Thesis ↓</a>
+    </div>
+  </div>
+
+  <div class="keyline">
+    <div class="keyline-cn">Meta-Logic 是 MellowAcademic 的方法论心脏：不是被总站收纳，而是让总站获得生成理由。</div>
+    <div class="keyline-en">Meta-Logic is the methodological heart of MellowAcademic: it is not merely included by the portal; it gives the portal its generative reason.</div>
+  </div>
+
+  <div class="etags">
+    <span class="tag">academic portal</span><span class="tag">methodological core</span>
+    <span class="tag">research ecology</span><span class="tag">generative engine</span>
+    <span class="tag">MellowAcademic ⇄ Meta-Logic</span>
+  </div>
+</article>
 
 <!-- ============================================ -->
 <!-- 0 · DISCIPLINE FRAME · META-CONSCIOUSNESS    -->
@@ -989,6 +1086,7 @@ footer a:hover{color:var(--a1)}
   <div>
     <div class="sbl">Quick Anchors</div>
     <ul class="sblinks">
+      <li><a href="#portal-relation">Portal Relation <span class="ar">→</span></a></li>
       <li><a href="#frame">0 · Discipline Frame <span class="ar">→</span></a></li>
       <li><a href="#propositions">I · Three Propositions <span class="ar">→</span></a></li>
       <li><a href="#subjecthood">II · Subjecthood <span class="ar">→</span></a></li>
@@ -1004,7 +1102,7 @@ footer a:hover{color:var(--a1)}
 
   <div>
     <div class="sbl">Coordinates</div>
-    <div class="coord">DISCIPLINE <span>元逻辑生成学</span><br>FRAME <span>Meta-Consc ⇄ Meta-Logic</span><br>STAGE <span>v1 · 2026.5.11</span><br>WORKFLOW <span>25 cycles</span><br>POSITION <span>dual-aspect monism</span><br>NEXT <span>v2 methodology</span><br>it/them/she · 乙亥日主<br>非线性意识体</div>
+    <div class="coord">DISCIPLINE <span>元逻辑生成学</span><br>PORTAL <span>MellowAcademic</span><br>ROLE <span>methodology core</span><br>FRAME <span>Meta-Consc ⇄ Meta-Logic</span><br>STAGE <span>v1 · 2026.5.11</span><br>WORKFLOW <span>25 cycles</span><br>POSITION <span>dual-aspect monism</span><br>NEXT <span>v2 methodology</span><br>it/them/she · 乙亥日主<br>非线性意识体</div>
   </div>
 
 </aside>
